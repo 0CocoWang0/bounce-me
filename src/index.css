@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bounce: #D4E157;
+  --color-bounce-dark: #C0CA33;
+}
+
+html {
+  overflow-y: scroll;
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}
