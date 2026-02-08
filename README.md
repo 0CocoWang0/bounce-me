@@ -106,8 +106,8 @@ npm run dev
 
 ## Next Steps
 
-- [ ] Wire up state management (Context or Zustand) so created events persist
+
 - [ ] Add real swipe gesture for RSVP (touch events or library)
 - [ ] Add transition animations between pages
-- [ ] Integrate Bounce's actual brand assets (logo, exact color palette)
+- [ ] Design polish (finish Figma WIP first)
 - [ ] Add Interac e-Transfer / payment mock flow
