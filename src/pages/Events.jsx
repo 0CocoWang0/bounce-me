@@ -1,45 +1,60 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useRef } from "react";
 import SwipeCard from "../components/SwipeCard";
 import { SWIPEABLE_EVENTS } from "../data/mock";
 
 export default function Events() {
-  const navigate = useNavigate();
   const [events, setEvents] = useState(SWIPEABLE_EVENTS);
-  const [swipedEvents, setSwipedEvents] = useState({
-    accepted: [],
-    rejected: [],
-  });
+  const [bg, setBg] = useState(null);
+  const [forceExit, setForceExit] = useState(null);
+  const busy = useRef(false);
 
-  const handleSwipe = (direction) => {
-    if (events.length === 0) return;
-
-    const currentEvent = events[0];
-    
-    if (direction === "right") {
-      setSwipedEvents((prev) => ({
-        ...prev,
-        accepted: [...prev.accepted, currentEvent],
-      }));
-    } else {
-      setSwipedEvents((prev) => ({
-        ...prev,
-        rejected: [...prev.rejected, currentEvent],
-      }));
-    }
+  // Called by SwipeCard after drag-commit OR after forceExit animation
+  const handleSwipeComplete = (direction) => {
+    setBg(direction);
+    setTimeout(() => setBg(null), 500);
 
     setEvents((prev) => prev.slice(1));
+    setForceExit(null);
+    busy.current = false;
   };
 
+  // Called by buttons
   const handleButtonClick = (direction) => {
-    handleSwipe(direction);
+    if (busy.current || events.length === 0) return;
+    busy.current = true;
+
+    // Set bg immediately so color shows behind the exiting card
+    setBg(direction);
+    setTimeout(() => setBg(null), 500);
+
+    // Tell the top card to animate out
+    setForceExit(direction);
+
+    // Remove the card after animation
+    setTimeout(() => {
+      setEvents((prev) => prev.slice(1));
+      setForceExit(null);
+      busy.current = false;
+    }, 400);
   };
+
+  const bgColor =
+    bg === "right"
+      ? "bg-green-500"
+      : bg === "left"
+        ? "bg-red-500"
+        : "bg-white";
 
   return (
-    <div className="flex flex-col" style={{ height: 'calc(100vh - 30px)' }}>
+    <div
+      className={`flex flex-col relative transition-colors duration-300 ${bgColor}`}
+      style={{ height: "calc(100vh - 30px)" }}
+    >
       {/* Header */}
       <div className="p-4">
-        <h1 className="text-2xl font-bold">Invited Events</h1>
+        <h1 className={`text-2xl font-bold transition-colors duration-300 ${bg ? "text-white" : "text-black"}`}>
+          Invited Events
+        </h1>
       </div>
 
       {/* Card Stack */}
@@ -51,6 +66,7 @@ export default function Events() {
             <p className="text-gray-600">
               You've seen all of your invited events. Check back later for more!
             </p>
+
           </div>
         ) : (
           <div className="relative h-full">
@@ -58,12 +74,10 @@ export default function Events() {
               <SwipeCard
                 key={event.id}
                 event={event}
-                onSwipe={index === 0 ? handleSwipe : () => {}}
+                onSwipe={index === 0 ? handleSwipeComplete : () => { }}
                 isTop={index === 0}
-                style={{
-                  transform: `scale(${1 - index * 0.05}) translateY(${index * 10}px)`,
-                  opacity: 1 - index * 0.2,
-                }}
+                stackIndex={index}
+                forceExit={index === 0 ? forceExit : null}
               />
             ))}
           </div>
@@ -72,16 +86,14 @@ export default function Events() {
 
       {/* Action Buttons */}
       {events.length > 0 && (
-        <div className="p-8 flex justify-center items-center gap-8 bg-white">
-          {/* Reject Button */}
+        <div className="p-8 flex justify-center items-center gap-8">
           <button
             onClick={() => handleButtonClick("left")}
-            className="w-16 h-16 rounded-full bg-white border-4 border-red-500 flex items-center justify-center shadow-lg hover:scale-110 transition-transform active:scale-95"
+            className={`w-16 h-16 rounded-full border-4 border-red-500 flex items-center justify-center shadow-lg hover:scale-110 transition-transform active:scale-95 ${bg ? "bg-transparent" : "bg-white"}`}
           >
             <span className="text-3xl font-bold text-red-500">✕</span>
           </button>
 
-          {/* Accept Button */}
           <button
             onClick={() => handleButtonClick("right")}
             className="w-16 h-16 rounded-full bg-green-500 flex items-center justify-center shadow-lg hover:scale-110 transition-transform active:scale-95"

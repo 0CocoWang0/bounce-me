@@ -1,131 +1,159 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Avatar from "./Avatar";
 import { getUserById } from "../data/mock";
 
-export default function SwipeCard({ event, onSwipe, style, isTop }) {
-  const [touchStart, setTouchStart] = useState(null);
-  const [touchCurrent, setTouchCurrent] = useState(null);
-  const cardRef = useRef(null);
+const SWIPE_THRESHOLD = 80;
 
-  const handleTouchStart = (e) => {
-    setTouchStart({
-      x: e.touches[0].clientX,
-      y: e.touches[0].clientY,
-    });
-  };
-
-  const handleTouchMove = (e) => {
-    if (!touchStart) return;
-    setTouchCurrent({
-      x: e.touches[0].clientX,
-      y: e.touches[0].clientY,
-    });
-  };
-
-  const handleTouchEnd = () => {
-    if (!touchStart || !touchCurrent) {
-      setTouchStart(null);
-      setTouchCurrent(null);
-      return;
-    }
-
-    const deltaX = touchCurrent.x - touchStart.x;
-    const deltaY = Math.abs(touchCurrent.y - touchStart.y);
-
-    // Check if horizontal movement is greater than vertical
-    if (Math.abs(deltaX) > 100 && Math.abs(deltaX) > deltaY) {
-      if (deltaX > 0) {
-        onSwipe("right");
-      } else {
-        onSwipe("left");
-      }
-    }
-
-    setTouchStart(null);
-    setTouchCurrent(null);
-  };
+export default function SwipeCard({ event, onSwipe, isTop, stackIndex, forceExit }) {
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const [dragging, setDragging] = useState(false);
+  const [exiting, setExiting] = useState(null);
+  const [entered, setEntered] = useState(false);
+  const startPos = useRef({ x: 0, y: 0 });
+  const alreadyExited = useRef(false);
 
   const host = getUserById(event.host);
-  const attendeeUsers = event.attendees.map(getUserById);
+  const attendeeUsers = event.attendees.map(getUserById).filter(Boolean);
 
-  // Calculate drag position
-  const dragX = touchStart && touchCurrent ? touchCurrent.x - touchStart.x : 0;
-  const dragY = touchStart && touchCurrent ? touchCurrent.y - touchStart.y : 0;
-  const rotation = dragX * 0.05; // Subtle rotation based on drag
+  // Entrance animation
+  useEffect(() => {
+    const t = setTimeout(() => setEntered(true), 30);
+    return () => clearTimeout(t);
+  }, []);
 
-  // Calculate opacity for accept/reject indicators
-  const acceptOpacity = Math.min(Math.max(dragX / 150, 0), 1);
-  const rejectOpacity = Math.min(Math.max(-dragX / 150, 0), 1);
+  // Handle button-triggered exit
+  useEffect(() => {
+    if (forceExit && !alreadyExited.current) {
+      alreadyExited.current = true;
+      setExiting(forceExit);
+    }
+  }, [forceExit]);
+
+  function handlePointerDown(e) {
+    if (!isTop || exiting) return;
+    e.currentTarget.setPointerCapture(e.pointerId);
+    startPos.current = { x: e.clientX, y: e.clientY };
+    setDragging(true);
+  }
+
+  function handlePointerMove(e) {
+    if (!dragging) return;
+    setOffset({
+      x: e.clientX - startPos.current.x,
+      y: e.clientY - startPos.current.y,
+    });
+  }
+
+  function handlePointerUp() {
+    if (!dragging) return;
+    setDragging(false);
+
+    if (offset.x > SWIPE_THRESHOLD) {
+      alreadyExited.current = true;
+      setExiting("right");
+      setTimeout(() => onSwipe("right"), 350);
+    } else if (offset.x < -SWIPE_THRESHOLD) {
+      alreadyExited.current = true;
+      setExiting("left");
+      setTimeout(() => onSwipe("left"), 350);
+    } else {
+      setOffset({ x: 0, y: 0 });
+    }
+  }
+
+  // Stack positioning
+  const stackScale = 1 - stackIndex * 0.05;
+  const stackY = stackIndex * 10;
+  const rotation = dragging ? offset.x * 0.08 : 0;
+
+  let cardTransform;
+  if (exiting === "right") {
+    cardTransform = `translateX(150%) rotate(20deg)`;
+  } else if (exiting === "left") {
+    cardTransform = `translateX(-150%) rotate(-20deg)`;
+  } else if (!entered) {
+    cardTransform = `scale(${stackScale * 0.92}) translateY(${stackY + 30}px)`;
+  } else {
+    cardTransform = `scale(${stackScale}) translateY(${stackY}px) translateX(${offset.x}px) rotate(${rotation}deg)`;
+  }
+
+  const acceptOpacity = Math.min(Math.max(offset.x / SWIPE_THRESHOLD, 0), 1);
+  const rejectOpacity = Math.min(Math.max(-offset.x / SWIPE_THRESHOLD, 0), 1);
 
   return (
     <div
-      ref={cardRef}
-      className="absolute inset-0 touch-none"
+      className="absolute inset-0 select-none"
       style={{
-        ...style,
-        transform: `translate(${dragX}px, ${dragY}px) rotate(${rotation}deg)`,
-        transition: touchStart ? "none" : "transform 0.3s ease-out",
-        zIndex: isTop ? 10 : 1,
+        transform: cardTransform,
+        transition: dragging ? "none" : "transform 0.4s cubic-bezier(.4,0,.2,1), opacity 0.4s ease",
+        opacity: entered ? 1 - stackIndex * 0.15 : 0,
+        zIndex: isTop ? 10 : 5 - stackIndex,
+        touchAction: "none",
       }}
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerUp}
     >
       <div className="w-full h-full rounded-3xl shadow-2xl overflow-hidden bg-white relative">
-        {/* Image/Color Section */}
+        {/* Image / color area */}
         <div
           className="h-2/3 relative flex items-center justify-center"
           style={{ backgroundColor: event.imageColor }}
         >
-          {/* Large Emoji */}
-          <div className="text-9xl">{event.emoji}</div>
+          <div className="text-9xl drop-shadow-lg">{event.emoji}</div>
 
-          {/* Accept Indicator */}
+          {/* Accept stamp */}
           <div
-            className="absolute top-8 right-8 bg-green-500 text-white px-6 py-3 rounded-2xl font-bold text-2xl rotate-12 border-4 border-white"
+            className="absolute top-8 left-6 border-4 border-green-500 text-green-500 px-4 py-2 rounded-xl font-black text-3xl -rotate-12 pointer-events-none"
             style={{ opacity: acceptOpacity }}
           >
-            ✓
+            I'M IN
           </div>
 
-          {/* Reject Indicator */}
+          {/* Reject stamp */}
           <div
-            className="absolute top-8 left-8 bg-red-500 text-white px-6 py-3 rounded-2xl font-bold text-2xl -rotate-12 border-4 border-white"
+            className="absolute top-8 right-6 border-4 border-red-500 text-red-500 px-4 py-2 rounded-xl font-black text-3xl rotate-12 pointer-events-none"
             style={{ opacity: rejectOpacity }}
           >
-            ✕
+            NOPE
           </div>
 
-          {/* Indicator Badge */}
-          <div className="absolute top-4 right-4 bg-black/80 text-white px-3 py-1.5 rounded-full text-xs font-medium backdrop-blur-sm">
-            {event.attendees.length > 1 && `${event.attendees.length - 1} going`}
-          </div>
+          {/* Going badge */}
+          {event.attendees.length > 1 && (
+            <div className="absolute top-4 right-4 bg-black/70 text-white px-3 py-1.5 rounded-full text-xs font-medium backdrop-blur-sm">
+              {event.attendees.length - 1} going
+            </div>
+          )}
         </div>
 
-        {/* Content Section */}
-        <div className="h-1/3 bg-white p-6 flex flex-col justify-between">
-          {/* Description */}
-          <p className="text-center text-base mb-3 text-gray-700">
-            {event.description}
-            <br />
-            <span className="font-semibold">Est. Price: ${event.estimatedPrice}?</span>
-          </p>
-
-          {/* Event Name, Date */}
+        {/* Info section */}
+        <div className="h-1/3 bg-white p-5 flex flex-col justify-between">
           <div>
-            <h2 className="text-3xl font-bold mb-1">{event.title}</h2>
-            <p className="text-gray-600 mb-3">{event.date}</p>
+            <p className="text-sm text-gray-500 mb-1">{event.description}</p>
+            <p className="text-sm font-semibold text-gray-700">
+              Est. ~${event.estimatedPrice}/person
+            </p>
+          </div>
 
-            {/* Attendees */}
-            <div className="flex items-center gap-2">
-              {attendeeUsers.slice(0, 3).map((user) => (
-                <Avatar key={user.id} initials={user.initials} size="sm" />
+          <div>
+            <h2 className="text-2xl font-bold">{event.title}</h2>
+            <p className="text-gray-400 text-sm mb-3">{event.date}</p>
+
+            <div className="flex items-center gap-1.5">
+              {attendeeUsers.slice(0, 4).map((user) => (
+                <div key={user.id} className="ring-2 ring-white rounded-full">
+                  <Avatar initials={user.initials} size="sm" />
+                </div>
               ))}
-              {event.attendees.length > 3 && (
-                <span className="text-sm font-semibold text-gray-600">
-                  +{event.attendees.length - 3}
+              {event.attendees.length > 4 && (
+                <span className="text-xs font-semibold text-gray-500 ml-1">
+                  +{event.attendees.length - 4}
                 </span>
               )}
+              <span className="text-xs text-gray-400 ml-auto">
+                by {host?.name}
+              </span>
             </div>
           </div>
         </div>
