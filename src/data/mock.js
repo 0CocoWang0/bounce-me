@@ -103,6 +103,65 @@ export const MOCK_NOTIFICATIONS = [
   { id: "n5", type: "settled", message: "Rent Cycle — Feb is fully settled", time: "1w ago", read: true },
 ];
 
+// --- Swipeable Events (our proposed feature) ---
+export const SWIPEABLE_EVENTS = [
+  {
+    id: "se1",
+    title: "Cat Cafe Hangout",
+    description: "I want to go to cate cafe!",
+    emoji: "🐱",
+    estimatedPrice: 50,
+    date: "2026-02-12",
+    host: "u3",
+    attendees: ["u3", "u5", "u2"],
+    imageColor: "#9CA3AF",
+  },
+  {
+    id: "se2",
+    title: "Brunch at St Barth",
+    description: "Let's do bottomless mimosas!",
+    emoji: "🥂",
+    estimatedPrice: 75,
+    date: "2026-02-14",
+    host: "u2",
+    attendees: ["u2", "u4"],
+    imageColor: "#F59E0B",
+  },
+  {
+    id: "se3",
+    title: "Movie Night",
+    description: "New horror movie just came out",
+    emoji: "🎬",
+    estimatedPrice: 25,
+    date: "2026-02-11",
+    host: "u4",
+    attendees: ["u4", "u3", "u2"],
+    imageColor: "#8B5CF6",
+  },
+  {
+    id: "se4",
+    title: "Karaoke Night",
+    description: "Time to embarrass ourselves!",
+    emoji: "🎤",
+    estimatedPrice: 40,
+    date: "2026-02-16",
+    host: "u5",
+    attendees: ["u5", "u3"],
+    imageColor: "#EC4899",
+  },
+  {
+    id: "se5",
+    title: "Escape Room Challenge",
+    description: "Can we beat it in 60 mins?",
+    emoji: "🔐",
+    estimatedPrice: 35,
+    date: "2026-02-13",
+    host: "u2",
+    attendees: ["u2", "u5", "u3", "u4"],
+    imageColor: "#10B981",
+  },
+];
+
 // --- Helpers ---
 export function getUserById(id) {
   return MOCK_USERS.find((u) => u.id === id);

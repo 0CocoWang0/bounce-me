@@ -79,6 +79,30 @@ export default function Home() {
               </Link>
             ))}
           </div>
+
+          {/* Invited Events Button */}
+          <Link
+            to="/events"
+            className="flex items-center justify-center gap-2 text-black font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow mt-3"
+            style={{ backgroundColor: '#D4E157' }}
+          >
+            <span className="text-xl"></span>
+            <span>Invited Events</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={2.5}
+              stroke="currentColor"
+              className="w-5 h-5"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+              />
+            </svg>
+          </Link>
         </section>
       )}
     </div>
