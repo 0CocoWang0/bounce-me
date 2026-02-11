@@ -8,6 +8,7 @@ import CreateEvent from "./pages/CreateEvent";
 import EventDetail from "./pages/EventDetail";
 import Split from "./pages/Split";
 import Events from "./pages/Events";
+import MomentDetail from "./pages/MomentDetail";
 
 function NavIcon({ d, label, icon }) {
   return (
@@ -111,6 +112,7 @@ export default function App() {
                 <Route path="/event/:eventId" element={<EventDetail />} />
                 <Route path="/split/:eventId" element={<Split />} />
                 <Route path="/events" element={<Events />} />
+                <Route path="/moment/:momentId" element={<MomentDetail />} />
               </Routes>
             </div>
             <Nav />
