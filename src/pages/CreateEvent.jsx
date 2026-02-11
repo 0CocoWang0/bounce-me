@@ -28,7 +28,7 @@ export default function CreateEvent() {
 
   return (
     <div className="px-5 pt-14">
-      <h1 className="text-2xl font-bold mb-6">Create Event</h1>
+      <h1 className="text-2xl font-bold mb-6 dark:text-white">Create Event</h1>
 
       <form onSubmit={handleSubmit} className="space-y-5">
         <div>
@@ -41,7 +41,7 @@ export default function CreateEvent() {
             onChange={(e) => setTitle(e.target.value)}
             required
             placeholder="Taco Tuesday, Study Sesh..."
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-bounce"
+            className="w-full border border-gray-200 dark:border-gray-700 dark:bg-card-dark dark:text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-bounce"
           />
         </div>
 
@@ -55,7 +55,7 @@ export default function CreateEvent() {
               value={date}
               onChange={(e) => setDate(e.target.value)}
               required
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-bounce"
+              className="w-full border border-gray-200 dark:border-gray-700 dark:bg-card-dark dark:text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-bounce"
             />
           </div>
           <div className="flex-1">
@@ -67,7 +67,7 @@ export default function CreateEvent() {
               value={time}
               onChange={(e) => setTime(e.target.value)}
               required
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-bounce"
+              className="w-full border border-gray-200 dark:border-gray-700 dark:bg-card-dark dark:text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-bounce"
             />
           </div>
         </div>
@@ -88,13 +88,13 @@ export default function CreateEvent() {
                   className={`w-full flex items-center gap-3 rounded-xl p-3 border transition-colors ${
                     selected
                       ? "border-bounce bg-bounce/10"
-                      : "border-gray-100 bg-gray-50"
+                      : "border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-card-dark"
                   }`}
                 >
                   <Avatar initials={user.initials} size="sm" />
-                  <span className="text-sm font-medium">{user.name}</span>
+                  <span className="text-sm font-medium dark:text-white">{user.name}</span>
                   {selected && (
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 text-bounce-dark ml-auto">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 text-bounce-dark dark:text-bounce ml-auto">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
                     </svg>
                   )}

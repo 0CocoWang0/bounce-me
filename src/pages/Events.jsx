@@ -6,7 +6,7 @@ export default function Events() {
   const [events, setEvents] = useState(SWIPEABLE_EVENTS);
   const [bg, setBg] = useState(null);
   const [forceExit, setForceExit] = useState(null);
-  const [history, setHistory] = useState([]); // { event, decision: "accepted" | "declined" }
+  const [history, setHistory] = useState([]);
   const [showHistory, setShowHistory] = useState(false);
   const busy = useRef(false);
 
@@ -27,12 +27,10 @@ export default function Events() {
     busy.current = false;
   }
 
-  // Called by SwipeCard after drag-commit
   const handleSwipeComplete = (direction) => {
     recordAndRemove(direction);
   };
 
-  // Called by buttons
   const handleButtonClick = (direction) => {
     if (busy.current || events.length === 0) return;
     busy.current = true;
@@ -61,20 +59,20 @@ export default function Events() {
       ? "bg-green-500"
       : bg === "left"
         ? "bg-red-500"
-        : "bg-white";
+        : "bg-white dark:bg-bounce-dark";
 
   const accepted = history.filter((h) => h.decision === "accepted");
   const declined = history.filter((h) => h.decision === "declined");
 
   return (
     <div
-      className={`flex flex-col relative transition-colors duration-300 ${bgColor}`}
+      className={`pt-14 flex flex-col relative transition-colors duration-300 ${bgColor}`}
       style={{ height: "calc(100vh - 30px)" }}
     >
       {/* Header */}
       <div className="p-4 flex items-center justify-between">
         <div>
-          <h1 className={`text-2xl font-bold transition-colors duration-300 ${bg ? "text-white" : "text-black"}`}>
+          <h1 className={`text-2xl font-bold transition-colors duration-300 ${bg ? "text-white" : "text-black dark:text-white"}`}>
             Invited Events
           </h1>
           {events.length > 0 && (
@@ -85,7 +83,7 @@ export default function Events() {
         </div>
         <button
           onClick={() => setShowHistory(true)}
-          className={`relative flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium border transition-colors duration-300 ${bg ? "border-white/40 text-white" : "border-gray-200 text-gray-600"
+          className={`relative flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium border transition-colors duration-300 ${bg ? "border-white/40 text-white" : "border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300"
             }`}
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
@@ -93,7 +91,7 @@ export default function Events() {
           </svg>
           History
           {history.length > 0 && (
-            <span className="bg-black text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+            <span className="bg-black dark:bg-white text-white dark:text-black text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
               {history.length}
             </span>
           )}
@@ -104,9 +102,9 @@ export default function Events() {
       <div className="flex-1 relative p-4">
         {events.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center text-center px-8">
-            <div className="text-6xl mb-4">🎉</div>
-            <h2 className="text-2xl font-bold mb-2">No More Events</h2>
-            <p className="text-gray-600">
+            <div className="text-6xl mb-4">{"\u{1F389}"}</div>
+            <h2 className="text-2xl font-bold mb-2 dark:text-white">No More Events</h2>
+            <p className="text-gray-600 dark:text-gray-400">
               You've seen all of your invited events. Check back later for more!
             </p>
           </div>
@@ -131,16 +129,16 @@ export default function Events() {
         <div className="p-8 flex justify-center items-center gap-8">
           <button
             onClick={() => handleButtonClick("left")}
-            className={`w-16 h-16 rounded-full border-4 border-red-500 flex items-center justify-center shadow-lg hover:scale-110 transition-transform active:scale-95 ${bg ? "bg-transparent" : "bg-white"}`}
+            className={`w-16 h-16 rounded-full border-4 border-red-500 flex items-center justify-center shadow-lg hover:scale-110 transition-transform active:scale-95 ${bg ? "bg-transparent" : "bg-white dark:bg-card-dark"}`}
           >
-            <span className="text-3xl font-bold text-red-500">✕</span>
+            <span className="text-3xl font-bold text-red-500">{"\u2715"}</span>
           </button>
 
           <button
             onClick={() => handleButtonClick("right")}
             className="w-16 h-16 rounded-full bg-green-500 flex items-center justify-center shadow-lg hover:scale-110 transition-transform active:scale-95"
           >
-            <span className="text-3xl font-bold text-white">✓</span>
+            <span className="text-3xl font-bold text-white">{"\u2713"}</span>
           </button>
         </div>
       )}
@@ -148,21 +146,19 @@ export default function Events() {
       {/* History Drawer */}
       {showHistory && (
         <div className="fixed inset-0 z-50 flex">
-          {/* Backdrop */}
           <div
             className="absolute inset-0 bg-black/30"
             onClick={() => setShowHistory(false)}
           />
 
-          {/* Panel */}
-          <div className="ml-auto relative w-[85%] max-w-sm bg-white h-full shadow-2xl overflow-y-auto animate-slide-in">
-            <div className="sticky top-0 bg-white border-b border-gray-100 p-4 flex items-center justify-between">
-              <h2 className="text-lg font-bold">Event History</h2>
+          <div className="ml-auto relative w-[85%] max-w-sm bg-white dark:bg-bounce-dark h-full shadow-2xl overflow-y-auto animate-slide-in">
+            <div className="sticky top-0 bg-white dark:bg-bounce-dark border-b border-gray-100 dark:border-gray-700 p-4 flex items-center justify-between">
+              <h2 className="text-lg font-bold dark:text-white">Event History</h2>
               <button
                 onClick={() => setShowHistory(false)}
-                className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500"
+                className="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-300"
               >
-                ✕
+                {"\u2715"}
               </button>
             </div>
 
@@ -173,7 +169,6 @@ export default function Events() {
                 </p>
               ) : (
                 <>
-                  {/* Accepted */}
                   {accepted.length > 0 && (
                     <section className="mb-6">
                       <p className="text-xs text-gray-400 uppercase tracking-wide mb-2">
@@ -183,13 +178,13 @@ export default function Events() {
                         {accepted.map(({ event }) => {
                           const host = getUserById(event.host);
                           return (
-                            <div key={event.id} className="flex items-center gap-3 bg-green-50 border border-green-100 rounded-xl p-3">
+                            <div key={event.id} className="flex items-center gap-3 bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-800 rounded-xl p-3">
                               <span className="text-2xl">{event.emoji}</span>
                               <div className="flex-1 min-w-0">
-                                <p className="text-sm font-semibold">{event.title}</p>
+                                <p className="text-sm font-semibold dark:text-white">{event.title}</p>
                                 <p className="text-xs text-gray-400">{event.date} · by {host?.name}</p>
                               </div>
-                              <span className="text-green-600 text-xs font-semibold">Going</span>
+                              <span className="text-green-600 dark:text-green-400 text-xs font-semibold">Going</span>
                             </div>
                           );
                         })}
@@ -197,7 +192,6 @@ export default function Events() {
                     </section>
                   )}
 
-                  {/* Declined */}
                   {declined.length > 0 && (
                     <section>
                       <p className="text-xs text-gray-400 uppercase tracking-wide mb-2">
@@ -207,7 +201,7 @@ export default function Events() {
                         {declined.map(({ event }) => {
                           const host = getUserById(event.host);
                           return (
-                            <div key={event.id} className="flex items-center gap-3 bg-gray-50 rounded-xl p-3">
+                            <div key={event.id} className="flex items-center gap-3 bg-gray-50 dark:bg-card-dark rounded-xl p-3">
                               <span className="text-2xl grayscale opacity-50">{event.emoji}</span>
                               <div className="flex-1 min-w-0">
                                 <p className="text-sm font-medium text-gray-400">{event.title}</p>

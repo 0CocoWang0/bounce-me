@@ -10,19 +10,77 @@ export const CURRENT_USER = {
 
 export const MOCK_USERS = [
   CURRENT_USER,
-  { id: "u2", name: "Nahian", username: "nahian", fullName: "Nahian Ahmed", initials: "NA", badges: ["reliable", "connector"] },
-  { id: "u3", name: "Irina", username: "irina", fullName: "Irina Petrov", initials: "IP", badges: ["organizer"] },
-  { id: "u4", name: "Sehaj", username: "sehaj", fullName: "Sehaj Singh", initials: "SS", badges: ["budget"] },
-  { id: "u5", name: "Alex", username: "alex", fullName: "Alex Chen", initials: "AC", badges: ["reliable"] },
+  {
+    id: "u2",
+    name: "Nahian",
+    username: "nahian",
+    fullName: "Nahian Ahmed",
+    initials: "NA",
+    badges: ["reliable", "connector"],
+  },
+  {
+    id: "u3",
+    name: "Irina",
+    username: "irina",
+    fullName: "Irina Petrov",
+    initials: "IP",
+    badges: ["organizer"],
+  },
+  {
+    id: "u4",
+    name: "Sehaj",
+    username: "sehaj",
+    fullName: "Sehaj Singh",
+    initials: "SS",
+    badges: ["budget"],
+  },
+  {
+    id: "u5",
+    name: "Alex",
+    username: "alex",
+    fullName: "Alex Chen",
+    initials: "AC",
+    badges: ["reliable"],
+  },
 ];
 
 // --- Badges (our proposed feature) ---
 export const BADGES = [
-  { id: "reliable", label: "The Reliable One", desc: "Always pays on time", icon: "🎯" },
-  { id: "organizer", label: "The Organizer", desc: "Creates events that bring people together", icon: "📋" },
-  { id: "connector", label: "The Social Connector", desc: "Invited 10+ friends to events", icon: "🤝" },
-  { id: "budget", label: "The Budget Boss", desc: "Keeps groups under budget", icon: "💰" },
-  { id: "spontaneous", label: "The Spontaneous Friend", desc: "Joined 5 events same-day", icon: "⚡" },
+  {
+    id: "reliable",
+    label: "The Reliable One",
+    desc: "Always pays on time",
+    icon: "🎯",
+    color: "#FF6B6B",
+  },
+  {
+    id: "organizer",
+    label: "The Organizer",
+    desc: "Creates events that bring people together",
+    icon: "📋",
+    color: "#4ECDC4",
+  },
+  {
+    id: "connector",
+    label: "The Social Connector",
+    desc: "Invited 10+ friends to events",
+    icon: "🤝",
+    color: "#FFD93D",
+  },
+  {
+    id: "budget",
+    label: "The Budget Boss",
+    desc: "Keeps groups under budget",
+    icon: "💰",
+    color: "#6BCB77",
+  },
+  {
+    id: "spontaneous",
+    label: "The Spontaneous Friend",
+    desc: "Joined 5 events same-day",
+    icon: "⚡",
+    color: "#A66CFF",
+  },
 ];
 
 // --- Events (our proposed feature — layered onto Groups) ---
@@ -88,19 +146,81 @@ export const MOCK_EVENTS = [
 
 // --- Transactions (matches Bounce's existing transaction screen) ---
 export const MOCK_TRANSACTIONS = [
-  { id: "t1", from: "u3", to: "u1", amount: 1.0, note: "Test", status: "pending", daysLeft: 29 },
-  { id: "t2", from: "u1", to: "u3", amount: 1.0, note: "BOUNCE ME BOUNCE ME", status: "pending", daysLeft: 29 },
-  { id: "t3", from: "u2", to: "u1", amount: 15.0, note: "Study Sunday split", status: "completed", daysLeft: 0 },
-  { id: "t4", from: "u3", to: "u1", amount: 600.0, note: "Rent — Feb", status: "completed", daysLeft: 0 },
+  {
+    id: "t1",
+    from: "u3",
+    to: "u1",
+    amount: 1.0,
+    note: "Test",
+    status: "pending",
+    daysLeft: 29,
+  },
+  {
+    id: "t2",
+    from: "u1",
+    to: "u3",
+    amount: 1.0,
+    note: "BOUNCE ME BOUNCE ME",
+    status: "pending",
+    daysLeft: 29,
+  },
+  {
+    id: "t3",
+    from: "u2",
+    to: "u1",
+    amount: 15.0,
+    note: "Study Sunday split",
+    status: "completed",
+    daysLeft: 0,
+  },
+  {
+    id: "t4",
+    from: "u3",
+    to: "u1",
+    amount: 600.0,
+    note: "Rent — Feb",
+    status: "completed",
+    daysLeft: 0,
+  },
 ];
 
 // --- Notifications (our proposed feature) ---
 export const MOCK_NOTIFICATIONS = [
-  { id: "n1", type: "rsvp", message: "Irina RSVP'd to Club Gathering", time: "2h ago", read: false },
-  { id: "n2", type: "badge", message: "You earned The Budget Boss badge!", time: "1d ago", read: false },
-  { id: "n3", type: "split", message: "Sehaj hasn't paid for Study Sunday yet", time: "1d ago", read: true },
-  { id: "n4", type: "event", message: "Taco Tuesday is in 2 days!", time: "2d ago", read: true },
-  { id: "n5", type: "settled", message: "Rent Cycle — Feb is fully settled", time: "1w ago", read: true },
+  {
+    id: "n1",
+    type: "rsvp",
+    message: "Irina RSVP'd to Club Gathering",
+    time: "2h ago",
+    read: false,
+  },
+  {
+    id: "n2",
+    type: "badge",
+    message: "You earned The Budget Boss badge!",
+    time: "1d ago",
+    read: false,
+  },
+  {
+    id: "n3",
+    type: "split",
+    message: "Sehaj hasn't paid for Study Sunday yet",
+    time: "1d ago",
+    read: true,
+  },
+  {
+    id: "n4",
+    type: "event",
+    message: "Taco Tuesday is in 2 days!",
+    time: "2d ago",
+    read: true,
+  },
+  {
+    id: "n5",
+    type: "settled",
+    message: "Rent Cycle — Feb is fully settled",
+    time: "1w ago",
+    read: true,
+  },
 ];
 
 // --- Swipeable Events (our proposed feature) ---
@@ -108,7 +228,7 @@ export const SWIPEABLE_EVENTS = [
   {
     id: "se1",
     title: "Cat Cafe Hangout",
-    description: "I want to go to cate cafe!",
+    description: "I want to go to cat cafe!",
     emoji: "🐱",
     estimatedPrice: 50,
     date: "2026-02-12",

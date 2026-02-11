@@ -1,11 +1,11 @@
 import { MOCK_NOTIFICATIONS } from "../data/mock";
 
 const TYPE_ICONS = {
-  rsvp: "👋",
-  badge: "🏅",
-  split: "💸",
-  event: "📅",
-  settled: "✅",
+  rsvp: "\u{1F44B}",
+  badge: "\u{1F3C5}",
+  split: "\u{1F4B8}",
+  event: "\u{1F4C5}",
+  settled: "\u{2705}",
 };
 
 export default function Notifications() {
@@ -14,7 +14,7 @@ export default function Notifications() {
 
   return (
     <div className="px-5 pt-14">
-      <h1 className="text-2xl font-bold mb-6">Notifications</h1>
+      <h1 className="text-2xl font-bold mb-6 dark:text-white">Notifications</h1>
 
       {unread.length > 0 && (
         <section className="mb-6">
@@ -23,11 +23,11 @@ export default function Notifications() {
             {unread.map((n) => (
               <div
                 key={n.id}
-                className="flex items-start gap-3 bg-gray-50 rounded-xl p-4"
+                className="flex items-start gap-3 bg-gray-50 dark:bg-card-dark rounded-xl p-4"
               >
                 <span className="text-lg mt-0.5">{TYPE_ICONS[n.type]}</span>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium">{n.message}</p>
+                  <p className="text-sm font-medium dark:text-white">{n.message}</p>
                   <p className="text-xs text-gray-400 mt-0.5">{n.time}</p>
                 </div>
                 <div className="w-2 h-2 rounded-full bg-bounce mt-2 shrink-0" />
@@ -48,7 +48,7 @@ export default function Notifications() {
               >
                 <span className="text-lg mt-0.5">{TYPE_ICONS[n.type]}</span>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm text-gray-500">{n.message}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">{n.message}</p>
                   <p className="text-xs text-gray-300 mt-0.5">{n.time}</p>
                 </div>
               </div>

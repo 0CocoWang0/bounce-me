@@ -24,10 +24,10 @@ export default function Split() {
   return (
     <div className="px-5 pt-14">
       <Link to={`/event/${eventId}`} className="text-sm text-gray-400 mb-4 block">
-        ← Back to event
+        &larr; Back to event
       </Link>
 
-      <h1 className="text-2xl font-bold mb-1">
+      <h1 className="text-2xl font-bold mb-1 dark:text-white">
         {event.emoji} {event.title}
       </h1>
       <p className="text-sm text-gray-400 mb-6">Split the bill</p>
@@ -46,15 +46,15 @@ export default function Split() {
             value={totalCost}
             onChange={(e) => setTotalCost(e.target.value)}
             placeholder="0.00"
-            className="w-full border border-gray-200 rounded-xl pl-9 pr-4 py-3 text-lg focus:outline-none focus:border-bounce"
+            className="w-full border border-gray-200 dark:border-gray-700 dark:bg-card-dark dark:text-white rounded-xl pl-9 pr-4 py-3 text-lg focus:outline-none focus:border-bounce"
           />
         </div>
       </div>
 
       {/* Per person */}
-      <div className="bg-gray-50 rounded-xl p-4 mb-6 text-center">
+      <div className="bg-gray-50 dark:bg-card-dark rounded-xl p-4 mb-6 text-center">
         <p className="text-xs text-gray-400 uppercase tracking-wide">Per Person</p>
-        <p className="text-3xl font-bold mt-1">${perPerson}</p>
+        <p className="text-3xl font-bold mt-1 dark:text-white">${perPerson}</p>
         <p className="text-xs text-gray-400 mt-1">
           split between {members.length} people
         </p>
@@ -67,17 +67,17 @@ export default function Split() {
           return (
             <div
               key={user.id}
-              className="flex items-center gap-3 bg-gray-50 rounded-xl p-3"
+              className="flex items-center gap-3 bg-gray-50 dark:bg-card-dark rounded-xl p-3"
             >
               <Avatar initials={user.initials} size="md" />
               <div className="flex-1">
-                <p className="text-sm font-medium">{user.name}</p>
+                <p className="text-sm font-medium dark:text-white">{user.name}</p>
               </div>
               <span
                 className={`text-xs font-semibold px-2.5 py-1 rounded-full ${
                   split?.paid
-                    ? "bg-green-100 text-green-700"
-                    : "bg-gray-200 text-gray-500"
+                    ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+                    : "bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-300"
                 }`}
               >
                 {split?.paid ? "Paid" : "Pending"}

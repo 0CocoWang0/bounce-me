@@ -95,7 +95,7 @@ export default function SwipeCard({ event, onSwipe, isTop, stackIndex, forceExit
       onPointerUp={handlePointerUp}
       onPointerCancel={handlePointerUp}
     >
-      <div className="w-full h-full rounded-3xl shadow-2xl overflow-hidden bg-white relative">
+      <div className="w-full h-full rounded-3xl shadow-2xl overflow-hidden bg-white dark:bg-card-dark relative">
         {/* Image / color area */}
         <div
           className="h-2/3 relative flex items-center justify-center"
@@ -128,21 +128,21 @@ export default function SwipeCard({ event, onSwipe, isTop, stackIndex, forceExit
         </div>
 
         {/* Info section */}
-        <div className="h-1/3 bg-white p-5 flex flex-col justify-between">
+        <div className="h-1/3 bg-white dark:bg-card-dark p-5 flex flex-col justify-between">
           <div>
-            <p className="text-sm text-gray-500 mb-1">{event.description}</p>
-            <p className="text-sm font-semibold text-gray-700">
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">{event.description}</p>
+            <p className="text-sm font-semibold text-gray-700 dark:text-gray-200">
               Est. ~${event.estimatedPrice}/person
             </p>
           </div>
 
           <div>
-            <h2 className="text-2xl font-bold">{event.title}</h2>
+            <h2 className="text-2xl font-bold dark:text-white">{event.title}</h2>
             <p className="text-gray-400 text-sm mb-3">{event.date}</p>
 
             <div className="flex items-center gap-1.5">
               {attendeeUsers.slice(0, 4).map((user) => (
-                <div key={user.id} className="ring-2 ring-white rounded-full">
+                <div key={user.id} className="ring-2 ring-white dark:ring-card-dark rounded-full">
                   <Avatar initials={user.initials} size="sm" />
                 </div>
               ))}

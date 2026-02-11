@@ -5,7 +5,7 @@ export default function Groups() {
   return (
     <div className="px-5 pt-14">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">Groups</h1>
+        <h1 className="text-2xl font-bold dark:text-white">Groups</h1>
         <Link
           to="/create"
           className="bg-bounce text-black text-sm font-semibold px-4 py-1.5 rounded-full flex items-center gap-1"
@@ -25,26 +25,26 @@ export default function Groups() {
             <Link
               key={event.id}
               to={`/event/${event.id}`}
-              className="flex items-center gap-3 bg-gray-50 rounded-xl p-4"
+              className="flex items-center gap-3 bg-gray-50 dark:bg-card-dark rounded-xl p-4"
             >
               <div className="w-12 h-12 rounded-full bg-gray-300 text-white flex items-center justify-center text-lg font-semibold">
                 {event.title.slice(0, 2).toUpperCase()}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-semibold">{event.title}</p>
+                <p className="font-semibold dark:text-white">{event.title}</p>
                 <p className="text-xs text-gray-400">
                   {host?.name} · {event.rsvps.length} members
                 </p>
               </div>
               <div className="text-right">
-                <p className="font-semibold text-sm">
+                <p className="font-semibold text-sm dark:text-white">
                   ${totalOwed > 0 ? totalOwed.toFixed(2) : "0.00"}
                 </p>
                 {event.status === "splitting" && (
-                  <span className="text-[10px] text-amber-600">pending</span>
+                  <span className="text-[10px] text-amber-600 dark:text-amber-400">pending</span>
                 )}
                 {event.status === "settled" && (
-                  <span className="text-[10px] text-green-600">settled</span>
+                  <span className="text-[10px] text-green-600 dark:text-green-400">settled</span>
                 )}
               </div>
             </Link>

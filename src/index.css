@@ -1,8 +1,11 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
-  --color-bounce: #D4E157;
-  --color-bounce-dark: #C0CA33;
+  --color-bounce: #d0f900;
+  --color-bounce-dark: #1e1c1d;
+  --color-card-dark: #2a2728;
 }
 
 html {
@@ -12,4 +15,14 @@ html {
 
 html::-webkit-scrollbar {
   display: none;
+}
+
+/* Hide scrollbar inside phone mockup */
+@media (min-width: 768px) {
+  .phone-scroll::-webkit-scrollbar {
+    display: none;
+  }
+  .phone-scroll {
+    scrollbar-width: none;
+  }
 }
