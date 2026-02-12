@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import SwipeCard from "../components/SwipeCard";
 import { SWIPEABLE_EVENTS, getUserById } from "../data/mock";
+import { useAcceptedEvents } from "../context/AcceptedEventsContext";
 
 export default function Events() {
   const [events, setEvents] = useState(SWIPEABLE_EVENTS);
@@ -10,12 +11,16 @@ export default function Events() {
   const [history, setHistory] = useState([]);
   const [showHistory, setShowHistory] = useState(false);
   const busy = useRef(false);
+  const { incrementAccepted } = useAcceptedEvents();
 
   function recordAndRemove(direction) {
     const current = events[0];
     if (current) {
       let decision = "declined";
-      if (direction === "right") decision = "accepted";
+      if (direction === "right") {
+        decision = "accepted";
+        incrementAccepted(); // Increment counter when accepting
+      }
       if (direction === "down") decision = "considering";
 
       setHistory((prev) => [
@@ -49,7 +54,10 @@ export default function Events() {
       const current = events[0];
       if (current) {
         let decision = "declined";
-        if (direction === "right") decision = "accepted";
+        if (direction === "right") {
+          decision = "accepted";
+          incrementAccepted(); // Increment counter when accepting
+        }
         if (direction === "down") decision = "considering";
         setHistory((prev) => [
           { event: current, decision },
