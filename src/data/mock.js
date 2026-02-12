@@ -1,4 +1,4 @@
-import cocoImg from "../assets/team-pic/coco.jpg";
+import cocoImg from "../assets/team-pic/coco.png";
 import nahianImg from "../assets/team-pic/nahian.png";
 import irinaImg from "../assets/team-pic/irina.png";
 import sehajImg from "../assets/team-pic/sehaj.png";
