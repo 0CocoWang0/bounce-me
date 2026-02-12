@@ -91,24 +91,25 @@ export default function Groups() {
         </Link>
       </div>
 
-      {/* Toggle Buttons */}
-      <div className="flex gap-2 mb-6">
+      {/* Toggle Text Tabs */}
+      <div className="flex justify-center gap-8 mb-6">
         <button
           onClick={() => setView("active")}
-          className={`flex-1 py-2.5 px-4 rounded-full font-semibold transition-colors ${
+          className={`text-sm font-bold transition-colors ${
             view === "active"
-              ? "bg-black text-white"
-              : "bg-gray-200 text-gray-700"
+              ? "text-black dark:text-white"
+              : "text-gray-400"
           }`}
         >
           🔥 Active
         </button>
+
         <button
           onClick={() => setView("settled")}
-          className={`flex-1 py-2.5 px-4 rounded-full font-semibold transition-colors ${
+          className={`text-sm font-bold transition-colors ${
             view === "settled"
-              ? "bg-black text-white"
-              : "bg-gray-200 text-gray-700"
+              ? "text-black dark:text-white"
+              : "text-gray-400"
           }`}
         >
           ✅ Settled
