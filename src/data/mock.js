@@ -94,7 +94,7 @@ export const BADGES = [
 
 // --- Events (our proposed feature — layered onto Groups) ---
 export const MOCK_EVENTS = [
-  {
+  /* {
     id: "e1",
     title: "Taco Tuesday",
     emoji: "🌮",
@@ -121,7 +121,7 @@ export const MOCK_EVENTS = [
       //   amount: 22
       // }
     ],
-  },
+  }, */
   {
     id: "e2",
     title: "Study Sunday",

@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { MOCK_EVENTS, getUserById } from "../data/mock";
+import { getUserById, CURRENT_USER } from "../data/mock";
+import { useEvents } from "../context/EventsContext";
 import Avatar from "../components/Avatar";
 
 export default function EventDetail() {
   const { eventId } = useParams();
-  const event = MOCK_EVENTS.find((e) => e.id === eventId);
+  const { events } = useEvents();
+  const event = events.find((e) => e.id === eventId);
   const [rsvpd, setRsvpd] = useState(false);
 
   if (!event) {
@@ -17,57 +19,135 @@ export default function EventDetail() {
   }
 
   const host = getUserById(event.host);
-  const members = event.rsvps.map((id) => getUserById(id)).filter(Boolean);
+  // Host first, then the rest
+  const members = [host, ...event.rsvps.map((id) => getUserById(id)).filter(Boolean).filter((u) => u.id !== event.host)];
 
-  // Calculate settlement percentage
+  const totalCost = event.totalCost || 0;
   const totalSplits = event.splits?.length || 0;
-  const paidSplits = event.splits?.filter(s => s.paid).length || 0;
-  let settlementPercentage = 0;
+  const paidSplits = event.splits?.filter((s) => s.paid).length || 0;
+  const unpaidAmount = event.splits?.filter((s) => !s.paid).reduce((sum, s) => sum + s.amount, 0) || 0;
 
+  let settlementPercentage = 0;
   if (event.status === "settled") {
     settlementPercentage = 100;
   } else if (event.status === "splitting") {
     settlementPercentage = totalSplits > 0 ? Math.round((paidSplits / totalSplits) * 100) : 0;
-  } else if (event.status === "upcoming") {
-    settlementPercentage = 0;
   }
 
-  // Get moments from event data
   const moments = event.moments || [];
+
+  // Fun emoji milestones for the progress bar
+  const progressEmoji =
+    settlementPercentage === 100 ? "🎉" :
+      settlementPercentage >= 75 ? "🔥" :
+        settlementPercentage >= 50 ? "💪" :
+          settlementPercentage >= 25 ? "🚀" : "🌱";
 
   return (
     <div className="px-5 pt-14 pb-8">
-      <Link to="/groups" className="text-sm text-gray-400 mb-4 block">
-        &larr; Back
-      </Link>
+      {/* Top nav */}
+      <div className="flex items-center justify-between mb-6">
+        <Link
+          to="/groups"
+          className="w-10 h-10 rounded-full bg-gray-100 dark:bg-card-dark flex items-center justify-center"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 dark:text-white">
+            <path fillRule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clipRule="evenodd" />
+          </svg>
+        </Link>
+        <div className="w-10 h-10 rounded-full bg-gray-100 dark:bg-card-dark flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 dark:text-white">
+            <path d="M3 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM8.5 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM15.5 8.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" />
+          </svg>
+        </div>
+      </div>
 
-      {/* Event header */}
-      <div className="text-center mb-6">
-        <div className="text-5xl mb-3">{event.emoji}</div>
+      {/* Event title with emoji */}
+      <div className="text-center mb-8">
+        <div className="text-6xl mb-3">{event.emoji}</div>
         <h1 className="text-2xl font-bold dark:text-white">{event.title}</h1>
         <p className="text-sm text-gray-400 mt-1">
           {event.date} at {event.time}
         </p>
       </div>
 
-      {/* Progress Bar */}
-      <div className="mb-6 bg-gray-400 rounded-full h-12 flex items-center justify-center relative overflow-hidden">
-        <div
-          className="absolute left-0 top-0 h-full bg-gray-500 transition-all duration-500"
-          style={{ width: `${settlementPercentage}%` }}
-        ></div>
-        <span className="relative z-10 text-white font-semibold">
-          {settlementPercentage}% settled
-        </span>
+      {/* People row — host first, horizontal scroll */}
+      <div className="flex gap-5 overflow-x-auto mb-8 p-1">
+        {members.map((user) => (
+          <div key={user.id} className="flex flex-col items-center gap-1.5 shrink-0">
+            <div className={`rounded-full ${user.id === event.host ? "ring-2 ring-bounce" : ""}`}>
+              <Avatar initials={user.initials} avatar={user.avatar} size="lg" />
+            </div>
+            <span className="text-xs text-gray-500 dark:text-gray-400">
+              {user.id === CURRENT_USER.id ? "you" : user.name.toLowerCase()}
+            </span>
+          </div>
+        ))}
+        <div className="flex flex-col items-center gap-1.5 shrink-0">
+          <div className="w-12 h-12 rounded-full bg-gray-200 dark:bg-card-dark flex items-center justify-center text-gray-400 text-xl">
+            +
+          </div>
+          <span className="text-xs text-gray-400">add</span>
+        </div>
       </div>
 
-      {/* RSVP swipe button */}
+      {/* Fun progress bar */}
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-xs text-gray-400 uppercase tracking-wide">Settlement</span>
+          <span className="text-xs font-semibold dark:text-white">{progressEmoji} {settlementPercentage}%</span>
+        </div>
+        <div className="h-3 bg-gray-100 dark:bg-card-dark rounded-full overflow-hidden relative">
+          <div
+            className="h-full rounded-full transition-all duration-700 ease-out"
+            style={{
+              width: `${Math.max(settlementPercentage, 2)}%`,
+              background: settlementPercentage === 100
+                ? "linear-gradient(90deg, #4ade80, #22c55e)"
+                : settlementPercentage >= 50
+                  ? "linear-gradient(90deg, #facc15, #4ade80)"
+                  : "linear-gradient(90deg, #f87171, #facc15)",
+            }}
+          />
+        </div>
+      </div>
+
+      {/* Expense + Balance cards */}
+      <div className="flex gap-3 mb-6">
+        <div className="flex-1 bg-gray-50 dark:bg-card-dark border border-gray-100 dark:border-gray-700 rounded-2xl p-4">
+          <p className="text-xs text-gray-400 mb-1">Group Expenses</p>
+          <p className="text-xl font-bold dark:text-white">${totalCost.toFixed(2)}</p>
+        </div>
+        <div className="flex-1 bg-gray-900 dark:bg-black rounded-2xl p-4">
+          <p className="text-xs text-gray-400 mb-1">Group Balance</p>
+          <p className={`text-xl font-bold ${unpaidAmount > 0 ? "text-red-400" : "text-green-400"}`}>
+            ${unpaidAmount.toFixed(2)}
+          </p>
+        </div>
+      </div>
+
+      {/* Action buttons */}
+      {event.status !== "settled" && (
+        <div className="flex gap-3 mb-8">
+          <button className="flex-1 text-center bg-gray-900 dark:bg-card-dark border border-gray-700 text-white font-semibold py-3.5 rounded-2xl text-sm">
+            Add expense
+          </button>
+          <button
+            className="flex-1 text-center font-semibold py-3.5 rounded-2xl text-sm text-black"
+            style={{ backgroundColor: "#D4E157" }}
+          >
+            Settle up
+          </button>
+        </div>
+      )}
+
+      {/* RSVP button for upcoming events */}
       {event.status === "upcoming" && !rsvpd && (
         <button
           onClick={() => setRsvpd(true)}
           className="w-full bg-bounce text-black font-semibold py-4 rounded-2xl text-base mb-6 active:scale-95 transition-transform"
         >
-          Swipe to RSVP &rarr;
+          RSVP →
         </button>
       )}
 
@@ -78,53 +158,10 @@ export default function EventDetail() {
         </div>
       )}
 
-      {/* Who's going */}
-      <section className="mb-6">
-        <h2 className="text-xs text-gray-400 uppercase tracking-wide mb-3">
-          Who's Going ({members.length})
-        </h2>
-        <div className="space-y-2">
-          {members.map((user) => (
-            <div
-              key={user.id}
-              className="flex items-center gap-3 bg-gray-50 dark:bg-card-dark rounded-xl p-3"
-            >
-              <Avatar initials={user.initials} avatar={user.avatar} size="md" />
-              <span className="text-sm font-medium flex-1 dark:text-white">{user.name}</span>
-              {user.id === event.host && (
-                <span className="text-[10px] bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-300 px-2 py-0.5 rounded-full">
-                  Host
-                </span>
-              )}
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Three Action Buttons */}
-      <div className="flex gap-3 mb-8">
-        <button
-          className="flex-1 text-center bg-black dark:bg-white text-white dark:text-black font-semibold py-3 rounded-full text-sm"
-        >
-          View split
-        </button>
-        <button
-          className="flex-1 text-center bg-black dark:bg-white text-white dark:text-black font-semibold py-3 rounded-full text-sm"
-        >
-          Add expense
-        </button>
-        <button
-          className="flex-1 text-center font-semibold py-3 rounded-full text-sm"
-          style={{ backgroundColor: '#D4E157' }}
-        >
-          Settle up
-        </button>
-      </div>
-
       {/* Moments Section */}
       {moments.length > 0 && (
         <section>
-          <h2 className="text-2xl font-bold mb-4 dark:text-white">Moments</h2>
+          <h2 className="text-lg font-bold mb-4 dark:text-white">Moments</h2>
           <div className="flex gap-3">
             {moments.map((moment) => {
               const author = getUserById(moment.author);

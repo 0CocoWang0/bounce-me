@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MOCK_USERS, CURRENT_USER } from "../data/mock";
+import { useEvents } from "../context/EventsContext";
 import Avatar from "../components/Avatar";
 
 export default function CreateEvent() {
   const navigate = useNavigate();
+  const { addEvent } = useEvents();
   const [title, setTitle] = useState("");
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
@@ -22,7 +24,19 @@ export default function CreateEvent() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    alert(`Event "${title}" created with ${invited.length} invited! (mock)`);
+    addEvent({
+      id: `e_new_${Date.now()}`,
+      title,
+      emoji: "🎈",
+      date,
+      time,
+      host: CURRENT_USER.id,
+      rsvps: [CURRENT_USER.id, ...invited],
+      totalCost: null,
+      splits: [],
+      status: "upcoming",
+      moments: [],
+    });
     navigate("/groups");
   }
 

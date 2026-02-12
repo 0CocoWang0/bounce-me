@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { CURRENT_USER, MOCK_USERS, MOCK_EVENTS, MOCK_NOTIFICATIONS } from "../data/mock";
+import { CURRENT_USER, MOCK_USERS, MOCK_EVENTS, MOCK_NOTIFICATIONS, SWIPEABLE_EVENTS } from "../data/mock";
 import Avatar from "../components/Avatar";
 
 const TYPE_ICONS = {
@@ -33,10 +33,26 @@ export default function Home() {
 
   return (
     <div className="px-5 pt-14">
-      {/* Greeting */}
-      <h1 className="text-sm font-bold mb-6 text-black dark:text-white">
-        Afternoon, {CURRENT_USER.username}!
-      </h1>
+      {/* Greeting + Event Inbox */}
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-sm font-bold text-black dark:text-white">
+          Afternoon, {CURRENT_USER.username}!
+        </h1>
+        <Link
+          to="/events"
+          className="relative flex items-center gap-1.5 bg-gray-100 dark:bg-card-dark px-3 py-2 rounded-full"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 dark:text-white">
+            <path fillRule="evenodd" d="M1 11.27c0-.246.033-.492.099-.73l1.523-5.521A2.75 2.75 0 015.273 3h9.454a2.75 2.75 0 012.651 2.019l1.523 5.52c.066.239.099.485.099.732V15.25A2.75 2.75 0 0116.25 18H3.75A2.75 2.75 0 011 15.25v-3.98zm3.068-5.852A1.25 1.25 0 015.273 4.5h9.454a1.25 1.25 0 011.205.918l1.523 5.52c.006.02.01.041.015.062H14a1 1 0 00-.86.49l-.606 1.02a1 1 0 01-.86.49H8.326a1 1 0 01-.86-.49l-.606-1.02A1 1 0 006 11H2.432l.015-.062 1.621-5.52z" clipRule="evenodd" />
+          </svg>
+          <span className="text-xs font-semibold dark:text-white">Inbox</span>
+          {SWIPEABLE_EVENTS.length > 0 && (
+            <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">
+              {SWIPEABLE_EVENTS.length}
+            </span>
+          )}
+        </Link>
+      </div>
 
       {/* Friends row */}
       <div className="flex gap-5 mb-10 overflow-x-auto">
