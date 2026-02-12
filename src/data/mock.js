@@ -137,6 +137,40 @@ export const MOCK_EVENTS = [
       { userId: "u4", amount: 15.0, paid: false },
     ],
     status: "splitting",
+    expenses: [
+      {
+        id: "exp_s1",
+        name: "Coffee & Pastries",
+        emoji: "☕",
+        payer: "u2",
+        amount: 27.0,
+        time: "2:30 PM",
+        photos: [
+          "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400",
+          "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400",
+        ],
+      },
+      {
+        id: "exp_s2",
+        name: "Printing Notes",
+        emoji: "🖨️",
+        payer: "u1",
+        amount: 8.0,
+        time: "3:00 PM",
+        photos: [],
+      },
+      {
+        id: "exp_s3",
+        name: "Late Night Snacks",
+        emoji: "🍕",
+        payer: "u4",
+        amount: 10.0,
+        time: "5:15 PM",
+        photos: [
+          "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400",
+        ],
+      },
+    ],
     moments: [
       {
         id: "m_study1",
@@ -200,6 +234,19 @@ export const MOCK_EVENTS = [
       { userId: "u4", amount: 600.0, paid: true },
     ],
     status: "settled",
+    expenses: [
+      {
+        id: "exp_r1",
+        name: "February Rent",
+        emoji: "🏠",
+        payer: "u1",
+        amount: 2400.0,
+        time: "12:00 PM",
+        photos: [
+          "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400",
+        ],
+      },
+    ],
     moments: [
       {
         id: "m_rent1",

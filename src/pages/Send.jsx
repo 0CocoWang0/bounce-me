@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { MOCK_USERS, MOCK_TRANSACTIONS, CURRENT_USER } from "../data/mock";
 import Avatar from "../components/Avatar";
 
@@ -14,12 +14,15 @@ const bounceContacts = MOCK_USERS.filter((u) => u.id !== CURRENT_USER.id);
 
 export default function Send() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const prefill = location.state;
+
   // 0=form+drag, 1=contacts, 2=confirm, 3=loading, 4=done
   const [step, setStep] = useState(0);
 
-  const [title, setTitle] = useState(pendingOutgoing?.note ?? "");
-  const [amount, setAmount] = useState(pendingOutgoing?.amount ?? 0);
-  const [recipient, setRecipient] = useState(null);
+  const [title, setTitle] = useState(prefill?.title ?? pendingOutgoing?.note ?? "");
+  const [amount, setAmount] = useState(prefill?.amount ?? pendingOutgoing?.amount ?? 0);
+  const [recipient, setRecipient] = useState(prefill?.recipient ?? null);
   const [searchQuery, setSearchQuery] = useState("");
 
   // Drag state — drag UP

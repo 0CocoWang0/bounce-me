@@ -12,6 +12,8 @@ import MomentDetail from "./pages/MomentDetail";
 import Request from "./pages/Request";
 import Send from "./pages/Send";
 import EventGroupPreview from "./pages/EventGroupPreview";
+import AddExpense from "./pages/AddExpense";
+import Reminder from "./pages/Reminder";
 
 function NavIcon({ d, label, icon }) {
   return (
@@ -120,6 +122,8 @@ export default function App() {
                 <Route path="/split/:eventId" element={<Split />} />
                 <Route path="/events" element={<Events />} />
                 <Route path="/event-preview/:eventId" element={<EventGroupPreview />} />
+                <Route path="/add-expense/:eventId" element={<AddExpense />} />
+                <Route path="/reminder/:eventId" element={<Reminder />} />
                 <Route path="/moment/:momentId" element={<MomentDetail />} />
                 <Route path="/request" element={<Request />} />
                 <Route path="/send" element={<Send />} />
