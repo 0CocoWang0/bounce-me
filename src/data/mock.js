@@ -1,3 +1,8 @@
+import cocoImg from "../assets/team-pic/coco.jpg";
+import nahianImg from "../assets/team-pic/nahian.png";
+import irinaImg from "../assets/team-pic/irina.png";
+import sehajImg from "../assets/team-pic/sehaj.png";
+
 // --- Users ---
 export const CURRENT_USER = {
   id: "u1",
@@ -5,6 +10,7 @@ export const CURRENT_USER = {
   username: "magicoco",
   fullName: "Keming Wang",
   initials: "KW",
+  avatar: cocoImg,
   badges: ["spontaneous", "budget"],
 };
 
@@ -16,6 +22,7 @@ export const MOCK_USERS = [
     username: "nahian",
     fullName: "Nahian Ahmed",
     initials: "NA",
+    avatar: nahianImg,
     badges: ["reliable", "connector"],
   },
   {
@@ -24,6 +31,7 @@ export const MOCK_USERS = [
     username: "irina",
     fullName: "Irina Petrov",
     initials: "IP",
+    avatar: irinaImg,
     badges: ["organizer"],
   },
   {
@@ -32,6 +40,7 @@ export const MOCK_USERS = [
     username: "sehaj",
     fullName: "Sehaj Singh",
     initials: "SS",
+    avatar: sehajImg,
     badges: ["budget"],
   },
   {
@@ -256,16 +265,16 @@ export const MOCK_TRANSACTIONS = [
 export const MOCK_NOTIFICATIONS = [
   {
     id: "n1",
-    type: "rsvp",
-    message: "Irina RSVP'd to Club Gathering",
-    time: "2h ago",
+    type: "badge",
+    message: "You earned The Budget Boss badge!",
+    time: "Just now",
     read: false,
   },
   {
     id: "n2",
-    type: "badge",
-    message: "You earned The Budget Boss badge!",
-    time: "1d ago",
+    type: "rsvp",
+    message: "Irina RSVP'd to Club Gathering",
+    time: "Just now",
     read: false,
   },
   {
@@ -302,7 +311,8 @@ export const SWIPEABLE_EVENTS = [
     date: "2026-02-12",
     host: "u3",
     attendees: ["u3", "u5", "u2"],
-    imageColor: "#9CA3AF",
+    imageColor: "#FF6B6B",
+    category: "Private",
   },
   {
     id: "se2",
@@ -313,7 +323,8 @@ export const SWIPEABLE_EVENTS = [
     date: "2026-02-14",
     host: "u2",
     attendees: ["u2", "u4"],
-    imageColor: "#F59E0B",
+    imageColor: "#FFD93D",
+    category: "Private",
   },
   {
     id: "se3",
@@ -324,7 +335,8 @@ export const SWIPEABLE_EVENTS = [
     date: "2026-02-11",
     host: "u4",
     attendees: ["u4", "u5", "u2"],
-    imageColor: "#8B5CF6",
+    imageColor: "#A66CFF",
+    category: "Club",
   },
   {
     id: "se4",
@@ -335,7 +347,8 @@ export const SWIPEABLE_EVENTS = [
     date: "2026-02-16",
     host: "u5",
     attendees: ["u5", "u3"],
-    imageColor: "#EC4899",
+    imageColor: "#4ECDC4",
+    category: "School",
   },
   {
     id: "se5",
@@ -346,7 +359,8 @@ export const SWIPEABLE_EVENTS = [
     date: "2026-02-13",
     host: "u2",
     attendees: ["u2", "u5", "u3", "u4"],
-    imageColor: "#10B981",
+    imageColor: "#6BCB77",
+    category: "Club",
   },
 ];
 

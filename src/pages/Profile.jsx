@@ -9,7 +9,7 @@ export default function Profile() {
     <div className="px-5 pt-14">
       {/* Avatar + name */}
       <div className="flex flex-col items-center mb-8">
-        <Avatar initials={CURRENT_USER.initials} size="xl" />
+        <Avatar initials={CURRENT_USER.initials} avatar={CURRENT_USER.avatar} size="xl" />
         <p className="font-bold text-lg mt-3 dark:text-white">{CURRENT_USER.username}</p>
         <p className="text-sm text-gray-400">{CURRENT_USER.fullName}</p>
       </div>

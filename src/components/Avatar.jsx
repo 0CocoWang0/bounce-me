@@ -1,4 +1,4 @@
-export default function Avatar({ initials, size = "md" }) {
+export default function Avatar({ initials, avatar, size = "md" }) {
   const sizes = {
     sm: "w-8 h-8 text-xs",
     md: "w-10 h-10 text-sm",
@@ -8,9 +8,13 @@ export default function Avatar({ initials, size = "md" }) {
 
   return (
     <div
-      className={`${sizes[size]} rounded-full bg-neutral-800 text-white flex items-center justify-center font-semibold shrink-0`}
+      className={`${sizes[size]} rounded-full bg-neutral-800 text-white flex items-center justify-center font-semibold shrink-0 overflow-hidden`}
     >
-      {initials}
+      {avatar ? (
+        <img src={avatar} alt={initials} className="w-full h-full object-cover" />
+      ) : (
+        initials
+      )}
     </div>
   );
 }

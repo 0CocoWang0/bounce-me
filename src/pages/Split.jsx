@@ -69,7 +69,7 @@ export default function Split() {
               key={user.id}
               className="flex items-center gap-3 bg-gray-50 dark:bg-card-dark rounded-xl p-3"
             >
-              <Avatar initials={user.initials} size="md" />
+              <Avatar initials={user.initials} avatar={user.avatar} size="md" />
               <div className="flex-1">
                 <p className="text-sm font-medium dark:text-white">{user.name}</p>
               </div>

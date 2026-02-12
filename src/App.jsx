@@ -101,7 +101,7 @@ export default function App() {
 
           {/* Scrollable app shell */}
           <div className="phone-scroll min-h-screen md:min-h-0 md:h-full md:overflow-y-auto bg-white dark:bg-gradient-to-t dark:from-bounce-dark dark:to-[#4C4647]">
-            <div className="max-w-md mx-auto pb-20 md:max-w-none">
+            <div className="max-w-md mx-auto pb-20 md:max-w-none md:h-full md:pb-0">
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/activity" element={<Activity />} />

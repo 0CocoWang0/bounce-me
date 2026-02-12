@@ -26,7 +26,7 @@ export default function Transactions() {
               const other = getUserById(isIncoming ? tx.from : tx.to);
               return (
                 <div key={tx.id} className="flex items-center gap-3 p-4">
-                  <Avatar initials={other?.initials ?? "?"} size="md" />
+                  <Avatar initials={other?.initials ?? "?"} avatar={other?.avatar} size="md" />
                   <div className="flex-1 min-w-0">
                     <p className="font-semibold text-sm dark:text-white">{other?.name}</p>
                     <p className="text-xs text-gray-400 truncate">{tx.note}</p>
@@ -53,7 +53,7 @@ export default function Transactions() {
               const other = getUserById(isIncoming ? tx.from : tx.to);
               return (
                 <div key={tx.id} className="flex items-center gap-3 p-4">
-                  <Avatar initials={other?.initials ?? "?"} size="md" />
+                  <Avatar initials={other?.initials ?? "?"} avatar={other?.avatar} size="md" />
                   <div className="flex-1 min-w-0">
                     <p className="font-semibold text-sm dark:text-white">{other?.name}</p>
                     <p className="text-xs text-gray-400 truncate">{tx.note}</p>

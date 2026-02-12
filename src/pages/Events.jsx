@@ -54,20 +54,14 @@ export default function Events() {
     }, 400);
   };
 
-  const bgColor =
-    bg === "right"
-      ? "bg-green-500"
-      : bg === "left"
-        ? "bg-red-500"
-        : "bg-white dark:bg-bounce-dark";
+
 
   const accepted = history.filter((h) => h.decision === "accepted");
   const declined = history.filter((h) => h.decision === "declined");
 
   return (
     <div
-      className={`pt-14 flex flex-col relative transition-colors duration-300 ${bgColor}`}
-      style={{ height: "calc(100vh - 30px)" }}
+      className={`pt-14 flex flex-col relative transition-colors duration-300 h-[calc(100vh-30px)] md:h-full`}
     >
       {/* Header */}
       <div className="p-4 flex items-center justify-between">
@@ -99,7 +93,7 @@ export default function Events() {
       </div>
 
       {/* Card Stack */}
-      <div className="flex-1 relative p-4">
+      <div className="flex-1 min-h-0 relative p-4">
         {events.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center text-center px-8">
             <div className="text-6xl mb-4">{"\u{1F389}"}</div>
@@ -126,7 +120,7 @@ export default function Events() {
 
       {/* Action Buttons */}
       {events.length > 0 && (
-        <div className="p-8 flex justify-center items-center gap-8">
+        <div className="p-20 flex justify-center items-center gap-8">
           <button
             onClick={() => handleButtonClick("left")}
             className={`w-16 h-16 rounded-full border-4 border-red-500 flex items-center justify-center shadow-lg hover:scale-110 transition-transform active:scale-95 ${bg ? "bg-transparent" : "bg-white dark:bg-card-dark"}`}

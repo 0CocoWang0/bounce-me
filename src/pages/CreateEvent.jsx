@@ -91,7 +91,7 @@ export default function CreateEvent() {
                       : "border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-card-dark"
                   }`}
                 >
-                  <Avatar initials={user.initials} size="sm" />
+                  <Avatar initials={user.initials} avatar={user.avatar} size="sm" />
                   <span className="text-sm font-medium dark:text-white">{user.name}</span>
                   {selected && (
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 text-bounce-dark dark:text-bounce ml-auto">

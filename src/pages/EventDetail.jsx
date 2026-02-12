@@ -89,7 +89,7 @@ export default function EventDetail() {
               key={user.id}
               className="flex items-center gap-3 bg-gray-50 dark:bg-card-dark rounded-xl p-3"
             >
-              <Avatar initials={user.initials} size="md" />
+              <Avatar initials={user.initials} avatar={user.avatar} size="md" />
               <span className="text-sm font-medium flex-1 dark:text-white">{user.name}</span>
               {user.id === event.host && (
                 <span className="text-[10px] bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-300 px-2 py-0.5 rounded-full">
