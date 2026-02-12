@@ -151,7 +151,20 @@ export default function EventGroupPreview() {
             The group will be created once the event starts.
           </p>
         </div>
+
+      ) : decision === "considering" ? (
+
+        <div className="bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-800 rounded-xl p-4 text-center">
+          <p className="text-yellow-700 dark:text-yellow-400 font-semibold">
+            You're considering this event 🤔
+          </p>
+          <p className="text-yellow-600 dark:text-yellow-500 text-xs mt-0.5">
+            Take your time — you can decide before it starts.
+          </p>
+        </div>
+
       ) : (
+
         <div className="bg-gray-50 dark:bg-card-dark border border-gray-200 dark:border-gray-700 rounded-xl p-4 text-center">
           <p className="text-gray-500 dark:text-gray-400 font-semibold">
             You skipped this event
@@ -160,6 +173,7 @@ export default function EventGroupPreview() {
             You can still change your mind and join.
           </p>
         </div>
+
       )}
     </div>
   );

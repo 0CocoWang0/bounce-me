@@ -14,8 +14,12 @@ export default function Events() {
   function recordAndRemove(direction) {
     const current = events[0];
     if (current) {
+      let decision = "declined";
+      if (direction === "right") decision = "accepted";
+      if (direction === "down") decision = "considering";
+
       setHistory((prev) => [
-        { event: current, decision: direction === "right" ? "accepted" : "declined" },
+        { event: current, decision },
         ...prev,
       ]);
     }
@@ -44,8 +48,11 @@ export default function Events() {
     setTimeout(() => {
       const current = events[0];
       if (current) {
+        let decision = "declined";
+        if (direction === "right") decision = "accepted";
+        if (direction === "down") decision = "considering";
         setHistory((prev) => [
-          { event: current, decision: direction === "right" ? "accepted" : "declined" },
+          { event: current, decision },
           ...prev,
         ]);
       }
@@ -59,6 +66,7 @@ export default function Events() {
 
   const accepted = history.filter((h) => h.decision === "accepted");
   const declined = history.filter((h) => h.decision === "declined");
+  const considering = history.filter((h) => h.decision === "considering");
 
   return (
     <div
@@ -121,20 +129,41 @@ export default function Events() {
 
       {/* Action Buttons */}
       {events.length > 0 && (
-        <div className="p-20 flex justify-center items-center gap-8">
+        <div className="p-20 flex justify-center items-center gap-10">
+
+          {/* Decline */}
           <button
             onClick={() => handleButtonClick("left")}
-            className={`w-16 h-16 rounded-full border-4 border-red-500 flex items-center justify-center shadow-lg hover:scale-110 transition-transform active:scale-95 ${bg ? "bg-transparent" : "bg-white dark:bg-card-dark"}`}
+            className="w-16 h-16 aspect-square rounded-full border-4 border-red-500 
+                      flex items-center justify-center shadow-lg 
+                      hover:scale-110 active:scale-95 transition-transform 
+                      bg-white dark:bg-card-dark shrink-0"
           >
             <span className="text-3xl font-bold text-red-500">{"\u2715"}</span>
           </button>
 
+          {/* Considering */}
+          <button
+            onClick={() => handleButtonClick("down")}
+            className="w-16 h-16 aspect-square rounded-full 
+                      bg-yellow-400 flex items-center justify-center 
+                      shadow-lg hover:scale-110 active:scale-95 
+                      transition-transform shrink-0"
+          >
+            <span className="text-3xl">🤔</span>
+          </button>
+
+          {/* Accept */}
           <button
             onClick={() => handleButtonClick("right")}
-            className="w-16 h-16 rounded-full bg-green-500 flex items-center justify-center shadow-lg hover:scale-110 transition-transform active:scale-95"
+            className="w-16 h-16 aspect-square rounded-full 
+                      bg-green-500 flex items-center justify-center 
+                      shadow-lg hover:scale-110 active:scale-95 
+                      transition-transform shrink-0"
           >
             <span className="text-3xl font-bold text-white">{"\u2713"}</span>
           </button>
+
         </div>
       )}
 
@@ -229,6 +258,36 @@ export default function Events() {
                       </div>
                     </section>
                   )}
+                  {considering.length > 0 && (
+                    <section className="mt-6 mb-6">
+                      <p className="text-xs text-gray-400 uppercase tracking-wide mb-2">
+                        Considering ({considering.length})
+                      </p>
+                      <div className="space-y-2">
+                        {considering.map(({ event }) => {
+                          const host = getUserById(event.host);
+                          return (
+                            <Link
+                              key={event.id}
+                              to={`/event-preview/${event.id}`}
+                              state={{ event, decision: "considering" }}
+                              className="flex items-center gap-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-100 dark:border-yellow-800 rounded-xl p-3 active:scale-[0.98] transition-transform"
+                            >
+                              <span className="text-2xl">{event.emoji}</span>
+                              <div className="flex-1 min-w-0">
+                                <p className="text-sm font-semibold dark:text-white">{event.title}</p>
+                                <p className="text-xs text-gray-400">{event.date} · by {host?.name}</p>
+                              </div>
+                              <span className="text-yellow-600 dark:text-yellow-400 text-xs font-semibold">
+                                Thinking
+                              </span>
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    </section>
+                  )}
+
                 </>
               )}
             </div>

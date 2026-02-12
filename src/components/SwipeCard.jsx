@@ -52,10 +52,17 @@ export default function SwipeCard({ event, onSwipe, isTop, stackIndex, forceExit
       alreadyExited.current = true;
       setExiting("right");
       setTimeout(() => onSwipe("right"), 350);
+
     } else if (offset.x < -SWIPE_THRESHOLD) {
       alreadyExited.current = true;
       setExiting("left");
       setTimeout(() => onSwipe("left"), 350);
+
+    } else if (offset.y > SWIPE_THRESHOLD) {
+      alreadyExited.current = true;
+      setExiting("down");
+      setTimeout(() => onSwipe("down"), 350);
+
     } else {
       setOffset({ x: 0, y: 0 });
     }
@@ -71,6 +78,8 @@ export default function SwipeCard({ event, onSwipe, isTop, stackIndex, forceExit
     cardTransform = `translateX(150%) rotate(20deg)`;
   } else if (exiting === "left") {
     cardTransform = `translateX(-150%) rotate(-20deg)`;
+  } else if (exiting === "down") {
+    cardTransform = `translateY(150%) rotate(5deg)`;
   } else if (!entered) {
     cardTransform = `scale(${stackScale * 0.92}) translateY(${stackY + 30}px)`;
   } else {
@@ -79,6 +88,7 @@ export default function SwipeCard({ event, onSwipe, isTop, stackIndex, forceExit
 
   const acceptOpacity = Math.min(Math.max(offset.x / SWIPE_THRESHOLD, 0), 1);
   const rejectOpacity = Math.min(Math.max(-offset.x / SWIPE_THRESHOLD, 0), 1);
+  const considerOpacity = Math.min(Math.max(offset.y / SWIPE_THRESHOLD, 0), 1);
 
   return (
     <div
@@ -120,6 +130,14 @@ export default function SwipeCard({ event, onSwipe, isTop, stackIndex, forceExit
           >
             NOPE
           </div>
+
+          {/* Considering stamp */}
+            <div
+              className="absolute bottom-8 left-1/2 -translate-x-1/2 border-4 border-yellow-400 text-yellow-500 px-4 py-2 rounded-xl font-black text-2xl pointer-events-none"
+              style={{ opacity: considerOpacity }}
+            >
+              THINKING
+            </div>
 
           {/* Going badge + attendee avatars — top right */}
           {event.attendees.length > 1 && (
