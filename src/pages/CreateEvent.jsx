@@ -11,6 +11,7 @@ export default function CreateEvent() {
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [invited, setInvited] = useState([]);
+  const [estimatedPrice, setEstimatedPrice] = useState("");
 
   const friends = MOCK_USERS.filter((u) => u.id !== CURRENT_USER.id);
 
@@ -33,6 +34,7 @@ export default function CreateEvent() {
       host: CURRENT_USER.id,
       rsvps: [CURRENT_USER.id, ...invited],
       totalCost: null,
+      estimatedPrice: estimatedPrice ? parseFloat(estimatedPrice) : 0,
       splits: [],
       status: "upcoming",
       moments: [],
@@ -85,6 +87,22 @@ export default function CreateEvent() {
             />
           </div>
         </div>
+
+        <div>
+          <label className="block text-xs text-gray-400 uppercase tracking-wide mb-1.5">
+            Estimated Price
+          </label>
+          <input
+            type="number"
+            min="0"
+            step="0.01"
+            value={estimatedPrice}
+            onChange={(e) => setEstimatedPrice(e.target.value)}
+            placeholder="25.00"
+            className="w-full border border-gray-200 dark:border-gray-700 dark:bg-card-dark dark:text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-bounce"
+          />
+        </div>
+
 
         {/* Invite friends */}
         <div>
