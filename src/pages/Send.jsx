@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { MOCK_USERS, MOCK_TRANSACTIONS, CURRENT_USER } from "../data/mock";
+import { MOCK_USERS, MOCK_TRANSACTIONS, CURRENT_USER, BADGES } from "../data/mock";
+import { useEvents } from "../context/EventsContext";
 import Avatar from "../components/Avatar";
 
 // Pick the first pending outgoing transaction as default
@@ -16,9 +17,13 @@ export default function Send() {
   const navigate = useNavigate();
   const location = useLocation();
   const prefill = location.state;
+  const { settleEvent } = useEvents();
+  const isSettleUp = !!prefill?.settleUp;
 
   // 0=form+drag, 1=contacts, 2=confirm, 3=loading, 4=done
   const [step, setStep] = useState(0);
+  const [progressAnimated, setProgressAnimated] = useState(false);
+  const [showButton, setShowButton] = useState(false);
 
   const [title, setTitle] = useState(prefill?.title ?? pendingOutgoing?.note ?? "");
   const [amount, setAmount] = useState(prefill?.amount ?? pendingOutgoing?.amount ?? 0);
@@ -65,13 +70,27 @@ export default function Send() {
     }
   }, [step]);
 
-  // Auto-navigate home after success
+  // Guard so settle-up celebration only fires once
+  const settledRef = useRef(false);
+
+  // Auto-navigate home after success (only for non-settle-up)
   useEffect(() => {
-    if (step === 4) {
+    if (step !== 4) return;
+
+    if (!isSettleUp) {
       const t = setTimeout(() => navigate("/"), 2000);
       return () => clearTimeout(t);
     }
-  }, [step, navigate]);
+
+    // Settle-up celebration — run once
+    if (settledRef.current) return;
+    settledRef.current = true;
+
+    settleEvent(prefill.settleUp.eventId);
+    const t1 = setTimeout(() => setProgressAnimated(true), 600);
+    const t2 = setTimeout(() => setShowButton(true), 1800);
+    return () => { clearTimeout(t1); clearTimeout(t2); };
+  }, [step]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Step 0: Form with draggable triangle
   if (step === 0) {
@@ -317,7 +336,146 @@ export default function Send() {
     );
   }
 
-  // Step 4: Success
+  // Step 4: Success — settle up celebration or generic
+  if (isSettleUp) {
+    const su = prefill.settleUp;
+    const currentPct = su.currentPercentage;
+    const animPct = progressAnimated ? 100 : currentPct;
+
+    // Confetti pieces
+    const confettiColors = ["#D4E157", "#FF6B6B", "#4ECDC4", "#FFD93D", "#A66CFF", "#6BCB77", "#FF9A8B", "#88D8F5"];
+    const confettiPieces = Array.from({ length: 40 }, (_, i) => ({
+      id: i,
+      left: `${Math.random() * 100}%`,
+      delay: `${Math.random() * 2}s`,
+      duration: `${2 + Math.random() * 2}s`,
+      color: confettiColors[i % confettiColors.length],
+      size: 4 + Math.random() * 6,
+      rotation: Math.random() * 360,
+      drift: (Math.random() - 0.5) * 80,
+    }));
+
+    // Pick 2 random badges the user "earned"
+    const earnedBadges = BADGES.sort(() => Math.random() - 0.5).slice(0, 2);
+
+    return (
+      <div className="min-h-screen md:min-h-0 md:h-full bg-bounce-dark flex flex-col relative overflow-hidden">
+        {/* Confetti */}
+        <div className="absolute inset-0 pointer-events-none z-10">
+          {confettiPieces.map((p) => (
+            <div
+              key={p.id}
+              className="absolute confetti-piece"
+              style={{
+                left: p.left,
+                top: -20,
+                width: p.size,
+                height: p.size * 1.5,
+                backgroundColor: p.color,
+                borderRadius: 2,
+                animationDelay: p.delay,
+                animationDuration: p.duration,
+                "--drift": `${p.drift}px`,
+                transform: `rotate(${p.rotation}deg)`,
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Content */}
+        <div className="flex-1 flex flex-col items-center justify-center px-8 relative z-20">
+          {/* Event emoji + title */}
+          <div className="text-6xl mb-3 animate-bounce">{su.emoji}</div>
+          <h1 className="text-xl font-bold text-white mb-1">{su.eventTitle}</h1>
+          <p className="text-sm text-gray-400 mb-8">All settled up!</p>
+
+          {/* Members row */}
+          <div className="flex -space-x-2 mb-8">
+            {su.members.map((user) => (
+              <div key={user.id} className="ring-2 ring-bounce-dark rounded-full">
+                <Avatar initials={user.initials} avatar={user.avatar} size="md" />
+              </div>
+            ))}
+          </div>
+
+          {/* Animated progress bar */}
+          <div className="w-full max-w-65 mb-2">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-xs text-gray-400">Settlement</span>
+              <span className="text-xs font-semibold text-white">
+                {animPct === 100 ? "🎉" : "🔥"} {animPct}%
+              </span>
+            </div>
+            <div className="h-3 bg-card-dark rounded-full overflow-hidden">
+              <div
+                className="h-full rounded-full"
+                style={{
+                  width: `${animPct}%`,
+                  background: "linear-gradient(90deg, #4ade80, #22c55e)",
+                  transition: "width 1.2s cubic-bezier(0.34, 1.56, 0.64, 1)",
+                }}
+              />
+            </div>
+          </div>
+
+          {/* Badges earned */}
+          {showButton && (
+            <div className="mt-8 animate-fade-in">
+              <p className="text-xs text-gray-400 text-center mb-3">You earned badges!</p>
+              <div className="flex gap-6 justify-center mb-6">
+                {earnedBadges.map((badge) => (
+                  <div key={badge.id} className="flex flex-col items-center gap-1.5 w-16">
+                    <div
+                      className="w-14 h-14 rounded-full flex items-center justify-center text-2xl"
+                      style={{ backgroundColor: badge.color }}
+                    >
+                      {badge.icon}
+                    </div>
+                    <span className="text-[10px] text-center leading-tight font-medium text-white">
+                      {badge.label}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Bottom button */}
+        {showButton && (
+          <div className="px-8 pb-28 relative z-20 animate-fade-in">
+            <button
+              onClick={() => navigate("/groups")}
+              className="w-full font-semibold py-4 rounded-2xl text-sm text-black active:scale-[0.98] transition-transform"
+              style={{ backgroundColor: "#D4E157" }}
+            >
+              Continue
+            </button>
+          </div>
+        )}
+
+        {/* Confetti + fade-in animations */}
+        <style>{`
+          @keyframes confetti-fall {
+            0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) translateX(var(--drift)) rotate(720deg); opacity: 0; }
+          }
+          .confetti-piece {
+            animation: confetti-fall linear forwards;
+          }
+          @keyframes fade-in {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          .animate-fade-in {
+            animation: fade-in 0.5s ease-out forwards;
+          }
+        `}</style>
+      </div>
+    );
+  }
+
+  // Step 4: Generic success (non-settle-up)
   return (
     <div className="min-h-screen md:min-h-0 md:h-full bg-bounce-dark flex flex-col items-center justify-center">
       <div className="w-20 h-20 rounded-full border-2 border-white flex items-center justify-center mb-6">

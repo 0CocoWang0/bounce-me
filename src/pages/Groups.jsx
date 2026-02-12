@@ -40,17 +40,13 @@ function EventRow({ event }) {
   );
 }
 
-function Section({ title, icon, count, accentClass, children }) {
+function Section({ title, count, children }) {
   if (count === 0) return null;
   return (
     <section className="mb-6">
-      <div className="flex items-center gap-2 mb-2">
-        <span className="text-base">{icon}</span>
-        <h2 className="text-sm font-semibold uppercase tracking-wide dark:text-white">{title}</h2>
-        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${accentClass}`}>
-          {count}
-        </span>
-      </div>
+      <p className="text-xs text-gray-400 uppercase tracking-wide mb-3">
+        {title} ({count})
+      </p>
       <div className="space-y-2">{children}</div>
     </section>
   );
@@ -75,7 +71,7 @@ export default function Groups() {
   return (
     <div className="px-5 pt-14">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold dark:text-white">Event Groups</h1>
+        <h1 className="text-2xl font-bold dark:text-white">Bounce Groups</h1>
         <Link
           to="/create"
           className="bg-bounce text-black text-sm font-semibold px-4 py-1.5 rounded-full flex items-center gap-1"
@@ -84,23 +80,13 @@ export default function Groups() {
         </Link>
       </div>
 
-      <Section
-        title="Active"
-        icon="🔥"
-        count={active.length}
-        accentClass="bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400"
-      >
+      <Section title="ACTIVE" count={active.length}>
         {active.map((event) => (
           <EventRow key={event.id} event={event} />
         ))}
       </Section>
 
-      <Section
-        title="Pending"
-        icon="💸"
-        count={pending.length}
-        accentClass="bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-400"
-      >
+      <Section title="Pending" count={pending.length}>
         {pending.map((event) => {
           const userSplit = event.splits.find(
             (s) => s.userId === CURRENT_USER.id && !s.paid
@@ -120,12 +106,7 @@ export default function Groups() {
         })}
       </Section>
 
-      <Section
-        title="Settled"
-        icon="✅"
-        count={settled.length}
-        accentClass="bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400"
-      >
+      <Section title="Settled" count={settled.length}>
         {settled.map((event) => (
           <EventRow key={event.id} event={event} />
         ))}
