@@ -113,13 +113,15 @@ export default function AddExpense() {
           </div>
 
           {/* Description input */}
-          <input
-            type="text"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="What's this expense for?"
-            className="w-full text-center text-base font-medium bg-transparent border-none outline-none dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500"
-          />
+          <div className="w-full bg-gray-50 dark:bg-card-dark border border-gray-200 dark:border-gray-700 rounded-2xl px-4 py-3 focus-within:border-bounce transition-colors">
+            <input
+              type="text"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="What's this expense for?"
+              className="w-full text-center text-base font-medium bg-transparent border-none outline-none dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500"
+            />
+          </div>
         </div>
 
         {/* Amount input */}
