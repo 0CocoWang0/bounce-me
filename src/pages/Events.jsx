@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { Link } from "react-router-dom";
 import SwipeCard from "../components/SwipeCard";
 import { SWIPEABLE_EVENTS, getUserById } from "../data/mock";
 
@@ -172,14 +173,24 @@ export default function Events() {
                         {accepted.map(({ event }) => {
                           const host = getUserById(event.host);
                           return (
-                            <div key={event.id} className="flex items-center gap-3 bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-800 rounded-xl p-3">
+                            <Link
+                              key={event.id}
+                              to={`/event-preview/${event.id}`}
+                              state={{ event, decision: "accepted" }}
+                              className="flex items-center gap-3 bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-800 rounded-xl p-3 active:scale-[0.98] transition-transform"
+                            >
                               <span className="text-2xl">{event.emoji}</span>
                               <div className="flex-1 min-w-0">
                                 <p className="text-sm font-semibold dark:text-white">{event.title}</p>
                                 <p className="text-xs text-gray-400">{event.date} · by {host?.name}</p>
                               </div>
-                              <span className="text-green-600 dark:text-green-400 text-xs font-semibold">Going</span>
-                            </div>
+                              <div className="flex items-center gap-1">
+                                <span className="text-green-600 dark:text-green-400 text-xs font-semibold">Going</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5 text-green-400">
+                                  <path fillRule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clipRule="evenodd" />
+                                </svg>
+                              </div>
+                            </Link>
                           );
                         })}
                       </div>
@@ -195,14 +206,24 @@ export default function Events() {
                         {declined.map(({ event }) => {
                           const host = getUserById(event.host);
                           return (
-                            <div key={event.id} className="flex items-center gap-3 bg-gray-50 dark:bg-card-dark rounded-xl p-3">
+                            <Link
+                              key={event.id}
+                              to={`/event-preview/${event.id}`}
+                              state={{ event, decision: "declined" }}
+                              className="flex items-center gap-3 bg-gray-50 dark:bg-card-dark rounded-xl p-3 active:scale-[0.98] transition-transform"
+                            >
                               <span className="text-2xl grayscale opacity-50">{event.emoji}</span>
                               <div className="flex-1 min-w-0">
                                 <p className="text-sm font-medium text-gray-400">{event.title}</p>
                                 <p className="text-xs text-gray-300">{event.date} · by {host?.name}</p>
                               </div>
-                              <span className="text-red-400 text-xs font-semibold">Skipped</span>
-                            </div>
+                              <div className="flex items-center gap-1">
+                                <span className="text-red-400 text-xs font-semibold">Skipped</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5 text-gray-300">
+                                  <path fillRule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clipRule="evenodd" />
+                                </svg>
+                              </div>
+                            </Link>
                           );
                         })}
                       </div>

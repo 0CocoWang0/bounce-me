@@ -4,12 +4,6 @@ import { getUserById } from "../data/mock";
 
 const SWIPE_THRESHOLD = 80;
 
-const CATEGORY_COLORS = {
-  Private: "bg-gray-700 text-white",
-  Club: "bg-purple-600 text-white",
-  School: "bg-blue-600 text-white",
-};
-
 export default function SwipeCard({ event, onSwipe, isTop, stackIndex, forceExit }) {
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [dragging, setDragging] = useState(false);
@@ -103,14 +97,6 @@ export default function SwipeCard({ event, onSwipe, isTop, stackIndex, forceExit
     >
       <div className="w-full max-h-full rounded-3xl min-h-1/2 h-full shadow-2xl overflow-visible bg-white dark:bg-card-dark relative flex flex-col">
 
-        {/* Category badge — sits on the top border */}
-        {event.category && (
-          <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-20">
-            <span className={`px-4 py-1 rounded-full text-xs font-bold tracking-wide shadow-md ${CATEGORY_COLORS[event.category] || "bg-gray-600 text-white"}`}>
-              {event.category}
-            </span>
-          </div>
-        )}
 
         {/* Image / color area */}
         <div
@@ -142,8 +128,8 @@ export default function SwipeCard({ event, onSwipe, isTop, stackIndex, forceExit
                 {attendeeUsers.slice(0, 3).map((user, i) => (
                   <div
                     key={user.id}
-                    className="ring-2 ring-white/30 rounded-full animate-bounce"
-                    style={{ animationDelay: `${i * 0.15}s`, animationDuration: "1.8s" }}
+                    className="ring-2 ring-white/30 rounded-full animate-bounce-slow"
+                    style={{ animationDelay: `${i * 0.15}s` }}
                   >
                     <Avatar initials={user.initials} avatar={user.avatar} size="sm" />
                   </div>

@@ -44,9 +44,9 @@ export default function EventDetail() {
           settlementPercentage >= 25 ? "🚀" : "🌱";
 
   return (
-    <div className="px-5 pt-14 pb-8">
+    <div className="px-5 pt-14 pb-25">
       {/* Top nav */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="sticky top-0 z-40 flex items-center justify-between mb-6 -mx-5 px-5 pt-2 pb-3 backdrop-blur-md">
         <Link
           to="/groups"
           className="w-10 h-10 rounded-full bg-gray-100 dark:bg-card-dark flex items-center justify-center"
@@ -141,22 +141,7 @@ export default function EventDetail() {
         </div>
       )}
 
-      {/* RSVP button for upcoming events */}
-      {event.status === "upcoming" && !rsvpd && (
-        <button
-          onClick={() => setRsvpd(true)}
-          className="w-full bg-bounce text-black font-semibold py-4 rounded-2xl text-base mb-6 active:scale-95 transition-transform"
-        >
-          RSVP →
-        </button>
-      )}
 
-      {rsvpd && (
-        <div className="bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 rounded-xl p-4 text-center mb-6">
-          <p className="text-green-700 dark:text-green-400 font-semibold">You're in!</p>
-          <p className="text-green-600 dark:text-green-500 text-xs mt-0.5">See you there.</p>
-        </div>
-      )}
 
       {/* Moments Section */}
       {moments.length > 0 && (

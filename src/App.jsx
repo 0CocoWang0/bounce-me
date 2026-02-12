@@ -9,6 +9,9 @@ import EventDetail from "./pages/EventDetail";
 import Split from "./pages/Split";
 import Events from "./pages/Events";
 import MomentDetail from "./pages/MomentDetail";
+import Request from "./pages/Request";
+import Send from "./pages/Send";
+import EventGroupPreview from "./pages/EventGroupPreview";
 
 function NavIcon({ d, label, icon }) {
   return (
@@ -105,7 +108,7 @@ export default function App() {
 
           {/* Scrollable app shell */}
           <div className="phone-scroll min-h-screen md:min-h-0 md:h-full md:overflow-y-auto bg-white dark:bg-gradient-to-t dark:from-bounce-dark dark:to-[#4C4647]">
-            <div className="max-w-md mx-auto pb-20 md:max-w-none md:h-full md:pb-0">
+            <div className="max-w-md mx-auto pb-20 md:max-w-none md:h-full">
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/activity" element={<Activity />} />
@@ -116,7 +119,10 @@ export default function App() {
                 <Route path="/event/:eventId" element={<EventDetail />} />
                 <Route path="/split/:eventId" element={<Split />} />
                 <Route path="/events" element={<Events />} />
+                <Route path="/event-preview/:eventId" element={<EventGroupPreview />} />
                 <Route path="/moment/:momentId" element={<MomentDetail />} />
+                <Route path="/request" element={<Request />} />
+                <Route path="/send" element={<Send />} />
               </Routes>
             </div>
             <Nav />

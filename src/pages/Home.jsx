@@ -72,18 +72,18 @@ export default function Home() {
 
       {/* Request / Send triangles */}
       <div className="flex justify-center gap-0 mb-10 h-full pt-30">
-        <div className="relative w-40 h-[139px] -mr-8 text-black dark:text-white">
+        <Link to="/request" className="relative w-40 h-[139px] -mr-8 text-black dark:text-white">
           <svg viewBox="0 0 160 139" className="w-full h-full">
             <path d="M12,0 L148,0 Q160,0 154,10.4 L86,128.6 Q80,139 74,128.6 L6,10.4 Q0,0 12,0 Z" className="fill-gray-100 dark:fill-black" />
           </svg>
           <span className="absolute inset-0 flex items-center justify-center font-semibold text-sm mt-[-30px]">Request</span>
-        </div>
-        <div className="relative w-40 h-[139px] -ml-8 text-black dark:text-white">
+        </Link>
+        <Link to="/send" className="relative w-40 h-[139px] -ml-8 text-black dark:text-white">
           <svg viewBox="0 0 160 139" className="w-full h-full">
             <path d="M86,10.4 L154,128.6 Q160,139 148,139 L12,139 Q0,139 6,128.6 L74,10.4 Q80,0 86,10.4 Z" className="fill-gray-100 dark:fill-black" />
           </svg>
           <span className="absolute inset-0 flex items-center justify-center font-semibold text-sm mt-[30px]">Send</span>
-        </div>
+        </Link>
       </div>
 
       {/* Notification Center */}

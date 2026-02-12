@@ -17,6 +17,22 @@ html::-webkit-scrollbar {
   display: none;
 }
 
+/* Bounce once then pause */
+@keyframes bounce-slow {
+  0% { transform: translateY(0); }
+  3% { transform: translateY(-30%); }
+  6% { transform: translateY(0); }
+  8% { transform: translateY(-15%); }
+  10% { transform: translateY(0); }
+  12% { transform: translateY(-5%); }
+  14% { transform: translateY(0); }
+  100% { transform: translateY(0); }
+}
+
+.animate-bounce-slow {
+  animation: bounce-slow 7s ease-in-out infinite;
+}
+
 /* Hide scrollbar inside phone mockup */
 @media (min-width: 768px) {
   .phone-scroll::-webkit-scrollbar {
