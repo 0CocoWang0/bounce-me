@@ -266,6 +266,108 @@ export const MOCK_EVENTS = [
       },
     ],
   },
+  {
+    id: "e5",
+    title: "New Year Party",
+    emoji: "🎊",
+    date: "2026-01-01",
+    time: "9:00 PM",
+    host: "u3",
+    rsvps: ["u1", "u2", "u3", "u4", "u5"],
+    totalCost: 350.0,
+    splits: [
+      { userId: "u1", amount: 70.0, paid: true },
+      { userId: "u2", amount: 70.0, paid: true },
+      { userId: "u3", amount: 70.0, paid: true },
+      { userId: "u4", amount: 70.0, paid: true },
+      { userId: "u5", amount: 70.0, paid: true },
+    ],
+    status: "settled",
+    expenses: [
+      {
+        id: "exp_ny1",
+        name: "Dinner",
+        emoji: "🍽️",
+        payer: "u3",
+        amount: 200.0,
+        time: "9:45 PM",
+      },
+      {
+        id: "exp_ny2",
+        name: "Champagne",
+        emoji: "🍾",
+        payer: "u4",
+        amount: 150.0,
+        time: "11:00 PM",
+      },
+    ],
+    moments: [
+      {
+        id: "m_ny1",
+        image: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800",
+        author: "u3",
+        timestamp: "2026-01-01 10:15 PM",
+        amount: 120
+      },
+      {
+        id: "m_ny2",
+        image: "https://images.unsplash.com/photo-1467810563316-b5476525c0f9?w=800",
+        author: "u1",
+        timestamp: "2026-01-01 11:45 PM",
+        amount: 80
+      }
+    ],
+  },
+  {
+    id: "e6",
+    title: "Winter Break Trip",
+    emoji: "✈️",
+    date: "2025-12-20",
+    time: "8:00 AM",
+    host: "u2",
+    rsvps: ["u1", "u2", "u3"],
+    totalCost: 900.0,
+    splits: [
+      { userId: "u1", amount: 300.0, paid: true },
+      { userId: "u2", amount: 300.0, paid: true },
+      { userId: "u3", amount: 300.0, paid: true },
+    ],
+    status: "settled",
+    expenses: [
+      {
+        id: "trip_n1",
+        name: "Chalet",
+        emoji: "🏠",
+        payer: "u2",
+        amount: 500.0,
+        time: "10:45 AM",
+      },
+      {
+        id: "trip_n2",
+        name: "Ski Passes",
+        emoji: "⛷️",
+        payer: "u3",
+        amount: 400.0,
+        time: "12:00 PM",
+      },
+    ],
+    moments: [
+      {
+        id: "m_trip1",
+        image: "https://images.unsplash.com/photo-1483721310020-03333e577078?w=800",
+        author: "u2",
+        timestamp: "2025-12-20 9:30 AM",
+        amount: 500
+      },
+      {
+        id: "m_trip2",
+        image: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800",
+        author: "u1",
+        timestamp: "2025-12-21 1:00 PM",
+        amount: 250
+      },
+    ],
+  }
 ];
 
 // --- Transactions (matches Bounce's existing transaction screen) ---

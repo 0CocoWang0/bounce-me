@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { getUserById, CURRENT_USER } from "../data/mock";
 import { useEvents } from "../context/EventsContext";
@@ -27,13 +28,19 @@ function EventRow({ event }) {
           ${totalOwed > 0 ? totalOwed.toFixed(2) : "0.00"}
         </p>
         {event.status === "splitting" && (
-          <span className="text-[10px] text-amber-600 dark:text-amber-400">splitting</span>
+          <span className="text-[10px] text-amber-600 dark:text-amber-400">
+            splitting
+          </span>
         )}
         {event.status === "upcoming" && (
-          <span className="text-[10px] text-blue-600 dark:text-blue-400">upcoming</span>
+          <span className="text-[10px] text-blue-600 dark:text-blue-400">
+            upcoming
+          </span>
         )}
         {event.status === "settled" && (
-          <span className="text-[10px] text-green-600 dark:text-green-400">settled</span>
+          <span className="text-[10px] text-green-600 dark:text-green-400">
+            settled
+          </span>
         )}
       </div>
     </Link>
@@ -54,22 +61,26 @@ function Section({ title, count, children }) {
 
 export default function Groups() {
   const { events } = useEvents();
+  const [view, setView] = useState("active"); // "active" or "settled"
 
-  // Active: upcoming or splitting (but not pending for current user)
-  const active = events.filter(
+  // Filter events based on status
+  const activeEvents = events.filter(
     (e) => e.status === "upcoming" || e.status === "splitting"
   );
 
-  // Pending: current user has an unpaid split
-  const pending = events.filter((e) =>
-    e.splits.some((s) => s.userId === CURRENT_USER.id && !s.paid)
-  );
+  const settledEvents = events.filter((e) => e.status === "settled");
 
-  // Settled: fully settled
-  const settled = events.filter((e) => e.status === "settled");
+  // Pending: only relevant for active view
+  const pending =
+    view === "active"
+      ? activeEvents.filter(
+          (e) => e.splits.some((s) => s.userId === CURRENT_USER.id && !s.paid)
+        )
+      : [];
 
   return (
     <div className="px-5 pt-14">
+      {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold dark:text-white">Bounce Groups</h1>
         <Link
@@ -80,37 +91,71 @@ export default function Groups() {
         </Link>
       </div>
 
-      <Section title="ACTIVE" count={active.length}>
-        {active.map((event) => (
-          <EventRow key={event.id} event={event} />
-        ))}
-      </Section>
+      {/* Toggle Buttons */}
+      <div className="flex gap-2 mb-6">
+        <button
+          onClick={() => setView("active")}
+          className={`flex-1 py-2.5 px-4 rounded-full font-semibold transition-colors ${
+            view === "active"
+              ? "bg-black text-white"
+              : "bg-gray-200 text-gray-700"
+          }`}
+        >
+          🔥 Active
+        </button>
+        <button
+          onClick={() => setView("settled")}
+          className={`flex-1 py-2.5 px-4 rounded-full font-semibold transition-colors ${
+            view === "settled"
+              ? "bg-black text-white"
+              : "bg-gray-200 text-gray-700"
+          }`}
+        >
+          ✅ Settled
+        </button>
+      </div>
 
-      <Section title="Pending" count={pending.length}>
-        {pending.map((event) => {
-          const userSplit = event.splits.find(
-            (s) => s.userId === CURRENT_USER.id && !s.paid
-          );
-          return (
-            <div key={event.id} className="relative">
-              <EventRow event={event} />
-              {userSplit && (
-                <div className="absolute top-2 right-2">
-                  <span className="text-[10px] font-bold bg-red-500 text-white px-2 py-0.5 rounded-full">
-                    You owe ${userSplit.amount.toFixed(2)}
-                  </span>
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </Section>
+      {/* Active View */}
+      {view === "active" && (
+        <>
+          <Section title="ACTIVE" count={activeEvents.length}>
+            {activeEvents.map((event) => (
+              <EventRow key={event.id} event={event} />
+            ))}
+          </Section>
 
-      <Section title="Settled" count={settled.length}>
-        {settled.map((event) => (
-          <EventRow key={event.id} event={event} />
-        ))}
-      </Section>
+          {pending.length > 0 && (
+            <Section title="Pending" count={pending.length}>
+              {pending.map((event) => {
+                const userSplit = event.splits.find(
+                  (s) => s.userId === CURRENT_USER.id && !s.paid
+                );
+                return (
+                  <div key={event.id} className="relative">
+                    <EventRow event={event} />
+                    {userSplit && (
+                      <div className="absolute top-2 right-2">
+                        <span className="text-[10px] font-bold bg-red-500 text-white px-2 py-0.5 rounded-full">
+                          You owe ${userSplit.amount.toFixed(2)}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </Section>
+          )}
+        </>
+      )}
+
+      {/* Settled View */}
+      {view === "settled" && (
+        <Section title="Settled" count={settledEvents.length}>
+          {settledEvents.map((event) => (
+            <EventRow key={event.id} event={event} />
+          ))}
+        </Section>
+      )}
     </div>
   );
 }
