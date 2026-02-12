@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { CURRENT_USER, MOCK_USERS, MOCK_EVENTS, MOCK_NOTIFICATIONS, SWIPEABLE_EVENTS } from "../data/mock";
+import { CURRENT_USER, MOCK_USERS, MOCK_NOTIFICATIONS, SWIPEABLE_EVENTS, getUserById } from "../data/mock";
+import { useEvents } from "../context/EventsContext";
 import Avatar from "../components/Avatar";
 
 const TYPE_ICONS = {
@@ -17,10 +18,8 @@ const newIds = new Set(newNotifs.map((n) => n.id));
 const restNotifs = MOCK_NOTIFICATIONS.filter((n) => !newIds.has(n.id));
 
 export default function Home() {
+  const { events } = useEvents();
   const friends = MOCK_USERS.filter((u) => u.id !== CURRENT_USER.id);
-  const upcoming = MOCK_EVENTS.filter(
-    (e) => e.status === "upcoming" || e.status === "splitting"
-  );
 
   /* Stagger the two new notifications dropping in */
   const [revealed, setRevealed] = useState(0);
@@ -92,41 +91,98 @@ export default function Home() {
         {newNotifs.map((n, i) => {
           /* Reveal bottom-up: last item first, top item last */
           const isVisible = revealed >= newNotifs.length - i;
+          const actionUser = n.actionable && n.userId ? getUserById(n.userId) : null;
+          const linkedEvent = n.eventId ? events.find((e) => e.id === n.eventId) : null;
+          const isSettled = linkedEvent?.status === "settled";
+          const Wrapper = n.link ? Link : "div";
+          const wrapperProps = n.link ? { to: n.link } : {};
+          const displayMsg = isSettled
+            ? `${n.groupName} is all bounced up fr ✅ no cap`
+            : n.message;
           return (
             <div
               key={n.id}
               className="overflow-hidden transition-all duration-500 ease-out"
               style={{
-                maxHeight: isVisible ? 80 : 0,
+                maxHeight: isVisible ? 100 : 0,
                 opacity: isVisible ? 1 : 0,
                 transform: isVisible ? "translateY(0)" : "translateY(20px)",
               }}
             >
-              <div className="flex items-start gap-3 rounded-2xl p-4 bg-gray-50 dark:bg-card-dark">
-                <span className="text-lg mt-0.5">{TYPE_ICONS[n.type]}</span>
+              <Wrapper
+                {...wrapperProps}
+                className={`flex items-start gap-3 rounded-2xl p-4 ${
+                  isSettled
+                    ? "bg-green-900/20 dark:bg-green-900/30 border border-green-800/40"
+                    : "bg-gray-50 dark:bg-card-dark"
+                }`}
+              >
+                {actionUser ? (
+                  <Avatar initials={actionUser.initials} avatar={actionUser.avatar} size="md" />
+                ) : (
+                  <span className="text-lg mt-0.5">{TYPE_ICONS[n.type]}</span>
+                )}
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium dark:text-white">{n.message}</p>
+                  <p className={`text-sm font-medium ${isSettled ? "text-green-400" : "dark:text-white"}`}>{displayMsg}</p>
                   <p className="text-xs text-gray-400 mt-0.5">{n.time}</p>
                 </div>
-                <div className="w-2 h-2 rounded-full bg-bounce mt-2 shrink-0" />
-              </div>
+                {n.actionable ? (
+                  <span className={`text-xs font-semibold px-2.5 py-1 rounded-full mt-0.5 shrink-0 ${
+                    isSettled
+                      ? "text-green-400 bg-green-400/20"
+                      : "text-bounce bg-bounce/20"
+                  }`}>
+                    {isSettled ? "Settled" : "Split"}
+                  </span>
+                ) : (
+                  <div className="w-2 h-2 rounded-full bg-bounce mt-2 shrink-0" />
+                )}
+              </Wrapper>
             </div>
           );
         })}
 
         {/* Existing notifications — already visible, pushed down by new ones */}
-        {restNotifs.map((n) => (
-          <div
-            key={n.id}
-            className="flex items-start gap-3 rounded-2xl p-4 bg-gray-50/60 dark:bg-card-dark/60"
-          >
-            <span className="text-lg mt-0.5">{TYPE_ICONS[n.type]}</span>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm text-gray-500 dark:text-gray-400">{n.message}</p>
-              <p className="text-xs text-gray-300 dark:text-gray-500 mt-0.5">{n.time}</p>
-            </div>
-          </div>
-        ))}
+        {restNotifs.map((n) => {
+          const actionUser = n.actionable && n.userId ? getUserById(n.userId) : null;
+          const linkedEvent = n.eventId ? events.find((e) => e.id === n.eventId) : null;
+          const isSettled = linkedEvent?.status === "settled";
+          const Wrapper = n.link ? Link : "div";
+          const wrapperProps = n.link ? { to: n.link } : {};
+          const displayMsg = isSettled
+            ? `${n.groupName} is all bounced up fr ✅ no cap`
+            : n.message;
+          return (
+            <Wrapper
+              key={n.id}
+              {...wrapperProps}
+              className={`flex items-start gap-3 rounded-2xl p-4 ${
+                isSettled
+                  ? "bg-green-900/10 dark:bg-green-900/20 border border-green-800/30"
+                  : "bg-gray-50/60 dark:bg-card-dark/60"
+              }`}
+            >
+              {actionUser ? (
+                <Avatar initials={actionUser.initials} avatar={actionUser.avatar} size="md" />
+              ) : (
+                <span className="text-lg mt-0.5">{TYPE_ICONS[n.type]}</span>
+              )}
+              <div className="flex-1 min-w-0">
+                <p className={`text-sm ${isSettled ? "text-green-400/80" : "text-gray-500 dark:text-gray-400"}`}>{displayMsg}</p>
+                <p className="text-xs text-gray-300 dark:text-gray-500 mt-0.5">{n.time}</p>
+              </div>
+              {n.actionable && (
+                <span className={`text-xs font-semibold px-2.5 py-1 rounded-full mt-0.5 shrink-0 ${
+                  isSettled
+                    ? "text-green-400/60 bg-green-400/10"
+                    : "text-bounce bg-bounce/20"
+                }`}>
+                  {isSettled ? "Settled" : "Split"}
+                </span>
+              )}
+            </Wrapper>
+          );
+        })}
       </div>
 
     </div>

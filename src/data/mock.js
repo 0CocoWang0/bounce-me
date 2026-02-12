@@ -312,10 +312,16 @@ export const MOCK_TRANSACTIONS = [
 export const MOCK_NOTIFICATIONS = [
   {
     id: "n1",
-    type: "badge",
-    message: "You earned The Budget Boss badge!",
+    type: "split",
+    message: "nahian wants u to split Study Sunday 📚 — $15.00 don't ghost bestie 💀",
     time: "Just now",
     read: false,
+    actionable: true,
+    userId: "u2",
+    eventId: "e2",
+    link: "/event/e2",
+    amount: 15.0,
+    groupName: "Study Sunday",
   },
   {
     id: "n2",
