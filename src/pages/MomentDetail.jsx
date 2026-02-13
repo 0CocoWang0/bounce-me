@@ -1,10 +1,11 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { getMomentById } from "../data/mock";
+import { getMomentById, getUserById } from "../data/mock";
+import Avatar from "../components/Avatar";
 
 export default function MomentDetail() {
   const { momentId } = useParams();
   const navigate = useNavigate();
-  
+
   const moment = getMomentById(momentId);
 
   if (!moment) {
@@ -15,47 +16,47 @@ export default function MomentDetail() {
     );
   }
 
+  const author = getUserById(moment.author);
+
   return (
-    <div className="h-screen overflow-hidden bg-white dark:bg-bounce-dark flex flex-col">
-      {/* Back Button */}
-      <button 
+    <div
+      className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center pb-20"
+      onClick={() => navigate(-1)}
+    >
+      {/* Close button */}
+      <button
+        className="absolute top-6 right-6 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white text-xl z-10"
         onClick={() => navigate(-1)}
-        className="flex items-center gap-2 px-5 pt-4 pb-2 text-gray-400 dark:text-gray-300"
       >
-        <svg 
-          xmlns="http://www.w3.org/2000/svg" 
-          fill="none" 
-          viewBox="0 0 24 24" 
-          strokeWidth={2} 
-          stroke="currentColor" 
-          className="w-5 h-5"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-        </svg>
-        <span className="text-sm">Back</span>
+        ✕
       </button>
 
-      {/* Header */}
-      <div className="px-5 pb-3">
-        <h1 className="text-2xl font-bold dark:text-white">Moments</h1>
-      </div>
+      {/* Image */}
+      <img
+        src={moment.image}
+        alt={`Moment by ${moment.authorName}`}
+        className="max-w-[85%] max-h-[75vh] rounded-2xl object-contain"
+        onClick={(e) => e.stopPropagation()}
+      />
 
-      {/* Image*/}
-      <div className="px-5 mb-3 flex-shrink-0">
-        <img 
-          src={moment.image} 
-          alt={`Moment by ${moment.authorName}`}
-          className="w-full aspect-[4/5] object-cover rounded-3xl"
-        />
-      </div>
-
-      {/* Details */}
-      <div className="px-5 pb-6">
-        <h2 className="text-xl font-bold mb-1 dark:text-white">
-          {moment.authorName} in {moment.eventName}
-        </h2>
-        <p className="text-gray-400 dark:text-gray-500 text-sm mb-2">{moment.timestamp}</p>
-        <p className="text-lg font-semibold dark:text-white">${moment.amount}</p>
+      {/* Bottom info overlay */}
+      <div
+        className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent px-6 pb-20 pt-16"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center gap-3 mb-2">
+          {author && (
+            <Avatar initials={author.initials} avatar={author.avatar} size="md" />
+          )}
+          <div>
+            <p className="text-white font-semibold text-sm">{moment.authorName}</p>
+            <p className="text-white/60 text-xs">{moment.eventName}</p>
+          </div>
+        </div>
+        <div className="flex items-center justify-between">
+          <p className="text-white/50 text-xs">{moment.timestamp}</p>
+          <p className="text-white font-bold text-sm">${moment.amount}</p>
+        </div>
       </div>
     </div>
   );

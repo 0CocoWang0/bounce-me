@@ -107,7 +107,7 @@ export default function Send() {
         {/* Top bar */}
         <div className="px-5 pt-14 flex items-center justify-between">
           <button
-            onClick={() => navigate("/")}
+            onClick={() => navigate(-1)}
             className="w-10 h-10 rounded-full bg-card-dark flex items-center justify-center"
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 text-white">
@@ -317,7 +317,7 @@ export default function Send() {
             Looks good!
           </button>
           <button
-            onClick={() => navigate("/")}
+            onClick={() => navigate(-1)}
             className="w-full text-white font-semibold py-3 text-sm"
           >
             Cancel
