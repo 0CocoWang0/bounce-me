@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, NavLink } from "react-router-dom";
 import { AcceptedEventsProvider, useAcceptedEvents } from "./context/AcceptedEventsContext";
+import qrCode from "./assets/qr-code.jpg";
 import Home from "./pages/Home";
 import Activity from "./pages/Activity";
 import Groups from "./pages/Groups";
@@ -100,10 +101,10 @@ function Nav() {
               `${isActive ? "text-black dark:text-bounce" : "text-gray-400 dark:text-[#4c4647]"}`
             }
           >
-            <NavIcon 
-              d={tab.d} 
-              label={tab.label} 
-              icon={tab.icon} 
+            <NavIcon
+              d={tab.d}
+              label={tab.label}
+              icon={tab.icon}
               badge={tab.showBadge ? acceptedCount : 0}
             />
           </NavLink>
@@ -117,7 +118,18 @@ function AppContent() {
   return (
     <BrowserRouter>
       {/* Desktop: dark bg + centered iPhone mockup. Mobile: no frame */}
-      <div className="min-h-screen md:bg-neutral-900 md:flex md:items-center md:justify-center">
+      <div className="min-h-screen md:bg-neutral-900 md:flex md:items-center md:justify-center md:gap-40">
+        {/* Left QR Code — desktop only */}
+        <div className="hidden lg:flex flex-col items-center gap-4">
+          <div className="bg-white rounded-2xl p-3 shadow-lg">
+            <img src={qrCode} alt="QR Code" className="w-60 h-60 rounded-lg" />
+          </div>
+          <div className="text-center">
+            <p className="text-white font-bold text-sm">Scan for iOS</p>
+            <p className="text-neutral-500 text-xs mt-0.5">App Store</p>
+          </div>
+        </div>
+
         <div className="relative w-full md:w-[393px] md:h-[852px] md:rounded-[55px] md:border-[14px] md:border-black md:shadow-[0_0_0_2px_#525252,0_50px_100px_-20px_rgba(0,0,0,0.5)] md:overflow-hidden md:[transform:translateZ(0)]">
           {/* Dynamic Island */}
           <div className="hidden md:block absolute top-2 left-1/2 -translate-x-1/2 w-[126px] h-[37px] bg-black rounded-full z-50" />
@@ -144,6 +156,17 @@ function AppContent() {
               </Routes>
             </div>
             <Nav />
+          </div>
+        </div>
+
+        {/* Right QR Code — desktop only */}
+        <div className="hidden lg:flex flex-col items-center gap-4">
+          <div className="bg-white rounded-2xl p-3 shadow-lg">
+            <img src={qrCode} alt="QR Code" className="w-60 h-60 rounded-lg" />
+          </div>
+          <div className="text-center">
+            <p className="text-white font-bold text-sm">Scan for Android</p>
+            <p className="text-neutral-500 text-xs mt-0.5">Google Play</p>
           </div>
         </div>
       </div>

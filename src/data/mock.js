@@ -304,18 +304,20 @@ export const MOCK_EVENTS = [
     moments: [
       {
         id: "m_ny1",
-        image: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800",
+        image:
+          "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800",
         author: "u3",
         timestamp: "2026-01-01 10:15 PM",
-        amount: 120
+        amount: 120,
       },
       {
         id: "m_ny2",
-        image: "https://images.unsplash.com/photo-1467810563316-b5476525c0f9?w=800",
+        image:
+          "https://images.unsplash.com/photo-1467810563316-b5476525c0f9?w=800",
         author: "u1",
         timestamp: "2026-01-01 11:45 PM",
-        amount: 80
-      }
+        amount: 80,
+      },
     ],
   },
   {
@@ -354,20 +356,22 @@ export const MOCK_EVENTS = [
     moments: [
       {
         id: "m_trip1",
-        image: "https://images.unsplash.com/photo-1483721310020-03333e577078?w=800",
+        image:
+          "https://images.unsplash.com/photo-1483721310020-03333e577078?w=800",
         author: "u2",
         timestamp: "2025-12-20 9:30 AM",
-        amount: 500
+        amount: 500,
       },
       {
         id: "m_trip2",
-        image: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800",
+        image:
+          "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800",
         author: "u1",
         timestamp: "2025-12-21 1:00 PM",
-        amount: 250
+        amount: 250,
       },
     ],
-  }
+  },
 ];
 
 // --- Transactions (matches Bounce's existing transaction screen) ---
@@ -415,7 +419,8 @@ export const MOCK_NOTIFICATIONS = [
   {
     id: "n1",
     type: "split",
-    message: "nahian wants u to split Study Sunday 📚 — $15.00 don't ghost bestie 💀",
+    message:
+      "nahian wants u to split Study Sunday 📚 — $15.00 don't ghost bestie 💀",
     time: "Just now",
     read: false,
     actionable: true,
@@ -425,6 +430,7 @@ export const MOCK_NOTIFICATIONS = [
     amount: 15.0,
     groupName: "Study Sunday",
   },
+
   {
     id: "n2",
     type: "rsvp",
@@ -441,8 +447,8 @@ export const MOCK_NOTIFICATIONS = [
   },
   {
     id: "n4",
-    type: "event",
-    message: "Taco Tuesday is in 2 days!",
+    type: "badge",
+    message: "You won The Budget Boss badge for the Winter Break Trip!",
     time: "2d ago",
     read: true,
   },
