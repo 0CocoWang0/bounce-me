@@ -16,11 +16,11 @@ export default function MomentDetail() {
   }
 
   return (
-    <div className="h-screen overflow-hidden bg-white flex flex-col">
+    <div className="h-screen overflow-hidden bg-white dark:bg-bounce-dark flex flex-col">
       {/* Back Button */}
       <button 
         onClick={() => navigate(-1)}
-        className="flex items-center gap-2 px-5 pt-4 pb-2 text-gray-400"
+        className="flex items-center gap-2 px-5 pt-4 pb-2 text-gray-400 dark:text-gray-300"
       >
         <svg 
           xmlns="http://www.w3.org/2000/svg" 
@@ -37,10 +37,10 @@ export default function MomentDetail() {
 
       {/* Header */}
       <div className="px-5 pb-3">
-        <h1 className="text-2xl font-bold">Moments</h1>
+        <h1 className="text-2xl font-bold dark:text-white">Moments</h1>
       </div>
 
-      {/* Image */}
+      {/* Image*/}
       <div className="px-5 mb-3 flex-shrink-0">
         <img 
           src={moment.image} 
@@ -51,11 +51,11 @@ export default function MomentDetail() {
 
       {/* Details */}
       <div className="px-5 pb-6">
-        <h2 className="text-xl font-bold mb-1">
+        <h2 className="text-xl font-bold mb-1 dark:text-white">
           {moment.authorName} in {moment.eventName}
         </h2>
-        <p className="text-gray-400 text-sm mb-2">{moment.timestamp}</p>
-        <p className="text-lg font-semibold">${moment.amount}</p>
+        <p className="text-gray-400 dark:text-gray-500 text-sm mb-2">{moment.timestamp}</p>
+        <p className="text-lg font-semibold dark:text-white">${moment.amount}</p>
       </div>
     </div>
   );
