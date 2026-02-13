@@ -275,8 +275,17 @@ export default function EventDetail() {
             </div>
           </div>
 
-          {/* Settle up button */}
-          <div className="mb-8">
+          {/* Action buttons - 2 column layout */}
+          <div className="mb-8 flex gap-3">
+            {/* Add Expense button */}
+            <button
+              onClick={() => navigate(`/add-expense/${event.id}`)}
+              className="flex-1 text-center font-semibold py-3.5 rounded-2xl text-sm bg-gray-50 dark:bg-card-dark border border-gray-100 dark:border-gray-700 active:scale-[0.98] transition-transform dark:text-white"
+            >
+              Add expense
+            </button>
+
+            {/* Settle up button */}
             {unpaidAmount > 0 ? (
               <button
                 onClick={() => {
@@ -299,14 +308,14 @@ export default function EventDetail() {
                     });
                   }
                 }}
-                className="w-full text-center font-semibold py-3.5 rounded-2xl text-sm text-black active:scale-[0.98] transition-transform"
+                className="flex-1 text-center font-semibold py-3.5 rounded-2xl text-sm text-black active:scale-[0.98] transition-transform"
                 style={{ backgroundColor: "#D4E157" }}
               >
                 Settle up
               </button>
             ) : (
-              <div className="w-full text-center font-semibold py-3.5 rounded-2xl text-sm text-gray-400 bg-gray-100 dark:bg-card-dark dark:text-gray-500">
-                You're all settled up!
+              <div className="flex-1 text-center font-semibold py-3.5 rounded-2xl text-sm text-gray-400 bg-gray-100 dark:bg-card-dark dark:text-gray-500">
+                All settled up!
               </div>
             )}
           </div>
@@ -314,20 +323,12 @@ export default function EventDetail() {
           {/* Expense History */}
           {expenses.length > 0 && (
             <section className="mb-8">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2">
-                  <span className="text-lg">🧾</span>
-                  <h2 className="text-lg font-bold dark:text-white">Expense History</h2>
-                  <span className="text-[10px] font-bold bg-gray-100 dark:bg-card-dark text-gray-500 dark:text-gray-400 px-2 py-0.5 rounded-full">
-                    {expenses.length}
-                  </span>
-                </div>
-                <button
-                  onClick={() => navigate(`/add-expense/${event.id}`)}
-                  className="flex items-center gap-1 text-xs font-semibold bg-gray-900 dark:bg-card-dark border border-gray-700 text-white px-3 py-1.5 rounded-full active:scale-95 transition-transform"
-                >
-                  <span className="text-sm">+</span> New
-                </button>
+              <div className="flex items-center gap-2 mb-4">
+                <span className="text-lg">🧾</span>
+                <h2 className="text-lg font-bold dark:text-white">Expense History</h2>
+                <span className="text-[10px] font-bold bg-gray-100 dark:bg-card-dark text-gray-500 dark:text-gray-400 px-2 py-0.5 rounded-full">
+                  {expenses.length}
+                </span>
               </div>
 
               <div className="relative">
